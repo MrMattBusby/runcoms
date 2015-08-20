@@ -1,0 +1,213 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""Python run command. Please see metadata (via pydoc) for further info.
+
+COPYRIGHT:
+- See __copyright__ below.
+
+LICENSE:
+- See __license__ below.
+
+USAGE:
+    $ [i]py[thon[3]] [-E  # To ignore this startup file] [-...]
+
+"""
+from __future__ import print_function, with_statement, division
+
+######################## Metadata #############################################
+
+# Metadata, used in $ pydoc ./%
+__creator__   = "Matt Busby"
+__email__     = "@MrMattBusby"
+__author__    = "{0} {1}".format(__creator__, __email__)
+__date__      = "2010-2015"
+__copyright__ = "Copyright (c) {year}, {owner}. All rights reserved.".format(\
+        year=__date__, owner=__creator__)
+__license__   = """\
+        {copyright}
+
+        Redistribution and use in source and binary forms, with or without
+        modification, are permitted provided that the following conditions
+        are met:
+
+        1. Redistributions of source code must retain the above copyright
+           notice, this list of conditions and the following disclaimer.
+
+        2. Redistributions in binary form must reproduce the above copyright
+           notice, this list of conditions and the following disclaimer in
+           the documentation and/or other materials provided with the
+           distribution.
+
+        3. Neither the name of the copyright holder nor the names of its
+           contributors may be used to endorse or promote products derived
+           from this software without specific prior written permission.
+
+        THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+        "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+        LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+        FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+        COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+        INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+        BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+        LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+        CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+        LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+        WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+        POSSIBILITY OF SUCH DAMAGE.
+        """.format(copyright=__copyright__)
+
+######################## Imports ##############################################
+
+import os
+import sys
+import time
+import re
+import math
+from datetime import datetime as dt
+from pprint import pprint
+# try:
+#     import pandas as pd
+# except ImportError:
+#     print(".pythonrc: no pandas module found, skipping...")
+try:
+    import numpy as np
+except ImportError:
+    # print(".pythonrc: no numpy module found, skipping...")
+    pass
+# try:
+#     import matplotlib.pyplot as plt
+# except ImportError:
+#     print(".pythonrc: no matplotlib module found, skipping...")
+
+# Bind TAB to autocomplete in interactive mode (or use ipython)
+import readline
+import rlcompleter
+readline.parse_and_bind("tab: complete")
+
+# Import constants and pyutils
+import imp
+try:
+    imp.load_source('pyutils', os.path.expanduser('~') + '/scripts/pyutils.py')
+    try:
+        from pyutils import *
+        ENV = Env()
+    except:
+        # print(".pythonrc: no pyutils module found, skipping...")
+        pass
+except IOError:
+    # print(".pythonrc: no pyutils.py found, skipping...")
+    pass
+try:
+    imp.load_source('consts', os.path.expanduser('~') + '/scripts/consts.py')
+    try:
+        import consts as C
+    except:
+        # print(".pythonrc: no consts module found, skipping...")
+        pass
+except IOError:
+    # print(".pythonrc: no consts.py found, skipping...")
+    pass
+del imp
+
+# Add to path
+DIR = os.path.expanduser('~')+'/scripts'
+if os.path.exists(DIR) and DIR not in sys.path:
+    sys.path.append(DIR)
+DIR = os.path.expanduser('~')+'/bin'
+if os.path.exists(DIR) and DIR not in sys.path:
+    sys.path.append(DIR)
+DIR = os.path.expanduser('~')+'/git'
+if os.path.exists(DIR) and DIR not in sys.path:
+    sys.path.append(DIR)
+del DIR
+
+######################## Dummy Data ###########################################
+
+# Useful when interactive
+b = True
+c = 'a'
+s = 'Hello World!\n'
+f = 123.456789
+i = 123
+n = 2^64+1
+x = complex(i, -1)
+l = [1.1, 2.2, 3.3]
+t = tuple(l)
+d = {'a': i, 'b': f, 'c': l}
+try:
+    a = np.array([l, [2 * each for each in l]])
+except NameError:
+    a = [l, [2 * each for each in l]]
+class O(object):
+    def __init__(self):
+        self.c = c
+        self.i = i
+        self.f = f
+o = O()
+try:
+    p = pd.DataFrame(data={'DataA': a[0], 'DataB': a[1]}, index=[0, 1, 2])
+except NameError:
+    p = None
+e = set(l)
+r = iter(l)
+m = lambda: None
+
+######################## Globals ##############################################
+
+# Initial environment variables, static
+HOME = os.path.expanduser('~')  # String
+NULL = '\0'                     # String
+NUL  = os.devnull               # String
+SERR = sys.stderr               # File object
+SIN  = sys.stdin                # File object
+SOUT = sys.stdout               # File object
+USER = os.getlogin()            # String
+
+# Patch math
+math.tau = 2. * math.pi
+tau = math.tau
+
+# Infinite and Nan should be std type
+try:
+    math.inf = float('inf')
+    math.nan = float('nan')
+except ValueError:
+    try:
+        math.inf = float('1.#INF')
+        math.nan = float('1.#IND')  # Indeterminate
+    except ValueError:
+        try:
+            math.inf = 1e3000
+            math.nan = math.inf-math.inf
+        except (ValueError, OverflowError):
+            math.inf = 9.999999999999999999999999e307
+            math.nan = -math.inf # Give up
+inf = math.inf
+nan = math.nan
+
+######################## Functions ############################################
+
+def _welcome():
+    import platform
+    import time
+    """Prints system info, etc."""
+    print("""
+Python {0} for {8} on {6} {1} {2}
+{7}
+{3}@{4} in {5}
+_______________________________________________________________________________
+""".format('.'.join(str(idx) for idx in sys.version_info[0:3]),             # 0
+           platform.uname()[0].title(),                                     # 1
+           platform.uname()[2][:platform.uname()[2].find('-')].title(),     # 2
+           os.getlogin(),                                                   # 3
+           platform.node(),                                                 # 4
+           os.getcwd(),                                                     # 5
+           os.name.upper(),                                                 # 6
+           time.strftime("%a %d %b %y %H:%M %Z w%W d%j", time.localtime()), # 7
+           ' '.join(platform.linux_distribution())))                        # 8
+    del platform, time
+
+######################## Execution ############################################
+
+if __name__ == '__main__':
+    _welcome()
