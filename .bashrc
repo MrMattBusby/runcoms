@@ -52,7 +52,7 @@ fi
 
 ### shell settings / vim mode ###
 set history
-#set keymap vi
+#set keymap vi  # vi style usage (can't Alt-. though)
 #set -o vi
 #set -u  # fail vs '' when using unset vars (exits bash)
 #set -e  # ignore failing commands
@@ -77,6 +77,7 @@ export LANG="C"
 export LANGUAGE="C"
 export LC_COLLATE="C"
 export NUL=/dev/null
+export PYTHONIOENCODING=utf_8
 export PYTHONSTARTUP=~/.pythonrc # _TODO_
 export PYTHONPATH=~/bin:~/scripts:~/git # _TODO_
 export SERR=/dev/stderr
@@ -91,10 +92,12 @@ fi
 
 ### !!! OVERWRITES !!! ###
 alias ascii='man ascii | tail --lines +19 | head -89' # info. version-dependant
+alias bpy='bpython-curses'
 alias cal='cal -3s'
 alias chgrp='chgrp --preserve-root' # perms
 alias chmod='chmod --preserve-root'  # perms
 alias chown='chown --preserve-root'  # perms
+alias cd='cd_func' # search subs
 alias ci='vim' # because typo
 alias cim='vim' # because typo
 alias cp='cp -i' # for safety
@@ -136,34 +139,36 @@ alias mc='mv'
 alias .-="cd - &> /dev/null"
 alias ..="cd .."
 alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+alias ..1="cd .."
 alias ..2="cd ../.."
 alias ..3="cd ../../.."
 alias ..4="cd ../../../.."
 alias ..5="cd ../../../../.."
 alias beautify='astyle -n -A2yCSUs3NLwYm0M40fpHk3W3j -xe'
-alias cd-='cd -'
+alias cd-="cd -"
 alias chx='chmod +x'
 alias cl-='cl -;'
 alias cpu='lscpu || cat /proc/cpuinfo'
-alias csv='libreoffice --calc'
 alias dff='df -kTh' # more readable
 alias duu='du -h --max-depth 1' # display 1-level, summarize folders
 alias hist='history | tail -15'
-alias hl='grep -E --color=always -e ^ -e' # highlight + preserve other output
+alias hl='grep -E --color=auto -e ^ -e' # highlight + preserve other output
 alias la='ls -HAhlpq1' # list all files
 alias ld='ls -d .*/ */ 2>/dev/null' # list directories only, simple
 alias lt='ls -Hhlpq1t' # list all non .* files by time
 alias l.='ls -d .* 2>/dev/null' # list all .* files
-alias m='make'
-alias mcm='make clean && make'
+alias man2='man 2'
+alias man3='man 3'
+alias man4='man 4'
 alias mem='cat /proc/meminfo'
 alias path='echo -e ${PATH//:/\\n}' # easily display path
-alias pdf='evince'
 alias psme="/bin/ps -F | head -1 && /bin/ps -aF --user $USER | hl $USER"
 alias pts='echo "pts: you are $(tty)" | egrep /.\* && echo && ps | head -1 && ps auxfh | grep pts/[[:digit:]]'
-alias py='python'
-alias py2='python2'
-alias py3='python3 -q || /opt/python3/bin/python3 -q'
+alias py='python -q 2> $NUL || python'
+alias py2='python2.7 -q'
+alias py3='python -q || /opt/python3/bin/python3 -q'
 alias scr='screen -dRR' # attach to first or create new
 alias scrls='screen -ls'
 alias so='source'
@@ -175,8 +180,57 @@ alias topmem='ps | head -1 && /bin/ps auxfh | sort -nr -k 4 | head'
 alias topme='ps | head -1 && ps auxfh | egrep $USER | sort -nr -k 3 | head | grep $USER'
 alias treed='\tree -dCASL 4' # dir only 3 deep
 alias trees='\tree -hpCASL 3' # files 2 deep
+alias v='vim'
 
-### svn ###
+### programs/filetypes ###
+function csv() {
+  gnumeric "$@" &
+}
+function csv2() {
+  libreoffice --calc "$@" &
+}
+function d() {
+  if [ $# -lt 1 ] ; then
+    echo -e "${CMDCOL}usage:${NC} d arg1 arg2.."
+  else
+    echo -e "${CMDCOL}diffuse -w $@ &${NC}"
+    diffuse -w $@ &
+  fi
+}
+function ff() {
+  firefox "$@" &
+}
+function image() {
+  gthumb "$@" &
+}
+function md() {
+  # view a markdown file via pandoc/firefox
+  if [ $# -ne 1 ] ; then
+    echo -e "${CMDCOL}md: Use one input parameter!${NC}"
+  else
+    echo -e "${CMDCOL}pandoc $1 -o "/tmp/$1.html" ; firefox "/tmp/$1.html" &${NC}"
+    pandoc $1 -o "/tmp/$1.html" 
+    firefox "/tmp/$1.html" &
+  fi
+}
+function pdf() {
+  evince "$@" &
+}
+
+### devel ###
+alias m='make'
+alias mcm='make clean && make'
+
+# svn diff x | le
+function sd() {
+  if command -v colordiff &>/dev/null ; then svn diff $@ | colordiff | less -R ; else svn diff $@ | less ; fi
+}
+
+# svn log -v x | le# svn log -v x | le
+function sl() {
+  if [ $# -eq 0 ] ; then svn log -v | less ; else svn log -v $@ | less ; fi
+}
+
 alias st='svn st' # | /bin/grep -v ^?'
 alias svn_count='svn log -q | grep "|" | awk "{print \$3}" | sort | uniq -c | sort -nr'
 alias up='svn up'
@@ -194,11 +248,36 @@ alias viv='vim ~/.vimrc'
 ### sudo ###
 alias ns='sudo netstat -pa --inet'
 alias ports='sudo netstat -tulanp' # open ports
+alias vig='sudo vim /etc/group'
 alias vih='sudo vim /etc/hosts'
+alias visudo='sudo vim /etc/sudoers'
 
 ### function definitions ###
 
-# change location then ls
+# cd to first subdir matching $1 if not found, can't run in subprocess
+function cd_func() {
+  if [ $# -ge 1 ] ; then
+    \cd "$1" 2> /dev/null ||
+    {
+      local IGDIRS="\/\.(svn|config|cache|vim|local|git)\/"
+      local SDIRT="\/${@}$"
+      echo -n "bash: cd: Not a directory, searching for \""${@}"\".."
+      #local FDIRS=$( \find . -type d -print0 2> /dev/null | \egrep -zZv --color=never "${IGDIRS}" | \egrep -zm1 --color=never "${SDIRT}" )  # Faster on time
+      local FDIRS=$( \find . -type d -regextype posix-egrep -regex ".*${SDIRT}" ! -regex ".*${IGDIRS}.*" -print -quit 2> /dev/null )  # Fewer time/calls/errors on strace
+      if [ -z "${FDIRS}" ] ; then
+        echo "not found!"
+        return 1
+      else
+        echo -n "\r                                                                               \r"
+        \cd "${FDIRS}"
+      fi
+    }
+  else
+    \cd
+  fi
+}
+
+# change location then ls, can't run in subprocess
 function cl() {
   cd $* 1>/dev/null && ls -pq
 }
@@ -245,29 +324,6 @@ function def() {
   curl dict://dict.org/d:"$(echo $@|xargs)":*
 }
 
-# svn diff x | less
-function sd() {
-  if [ $# -eq 0 ] ; then
-    svn diff | less
-  else
-    svn diff $@ | less
-  fi
-}
-
-# svn log -v x | less
-function sl() {
-  if [ $# -eq 0 ] ; then
-    svn log -v | less
-  else
-    svn log -v $@ | less
-  fi
-}
-
-# firefox
-function ff() {
-  firefox $@ &
-}
-
 # select line, use via pipe (count from 0)
 function line() {
   if [ $# -ne 1 ] ; then
@@ -280,17 +336,6 @@ function line() {
 # try to match a word for defining
 function match() {
   curl dict://dict.org/m:"$(echo $@|xargs)"::re
-}
-
-# view a markdown file via pandoc/firefox
-function md() {
-  if [ $# -ne 1 ] ; then
-    echo -e "${CMDCOL}md: Use one input parameter!${NC}"
-  else
-    echo -e "${CMDCOL}pandoc $1 -o "/tmp/$1.html" ; firefox "/tmp/$1.html" &${NC}"
-    pandoc $1 -o "/tmp/$1.html" 
-    firefox "/tmp/$1.html" &
-  fi
 }
 
 # make directory and goto
@@ -364,14 +409,14 @@ function create_ps() {
   local PS1_HIST="${BBLACK}[${BWHITE}\!${BBLACK}]"
 
   # time
-  local PS1_TIME="${WHITE}$(date "+%d-%b-%Y") ${BBLACK}<${WHITE}$(date "+%H:%M:%S")${BBLACK}>"
+  #local PS1_TIME="${WHITE}$(date "+%d-%b-%Y") ${BBLACK}<${WHITE}$(date "+%H:%M:%S")${BBLACK}>"
 
   # load hackkkkk
   local PS1_LOADAVG=($(cat /proc/loadavg))
   local PS1_STAT_C="$(($(mpstat | grep %idle | sed 's/%idle.*//' | wc -c)-1))"
   local PS1_LOAD_RAW=($(mpstat | grep %idle -A1 | tail -1 | sed $(echo 's/.\{'$PS1_STAT_C'\}//')))
   #local PS1_LOAD_RAW=($(mpstat | grep %idle -A1 | tail -1 | sed "s/.{${PS1_STAT_C}}//" | xargs))
-  local PS1_LOAD="${GREEN}$(echo ${PS1_LOAD_RAW[0]} | awk '{print 100-$1}')% ${PS1_LOADAVG[0]}"
+  local PS1_LOAD="${GREEN}$(echo ${PS1_LOAD_RAW[0]} | awk '{print 100-$1}')${BBLACK}% ${GREEN}${PS1_LOADAVG[0]}${BBLACK}l"
 
   # jobs
   local JOBS_C=$(jobs | wc -l)
@@ -384,14 +429,16 @@ function create_ps() {
   then local VIMS="${BLUE}${VIM_C}"
   else local VIMS="${YELLOW}${VIM_C}"
   fi
-  local PS1_JOBS="${PURPLE}jobs${WHITE}:${JOBS}${PURPLE} vims${WHITE}:${VIMS}"
+  #local PS1_JOBS="${PURPLE}jobs${WHITE}:${JOBS}${PURPLE} vims${WHITE}:${VIMS}"
+  local PS1_JOBS="${JOBS}${BBLACK}j ${VIMS}${BBLACK}v"
 
   # last command return
-  if [ $LAST_CMD == 0 ]
-  then PS1_RTN_COL=${BLUE}
-  else PS1_RTN_COL=${RED}
+  if [ $LAST_CMD == 0 ] ; then
+    local PS1_RTN=""
+  else
+    local PS1_RTN=" ${RED}${LAST_CMD} "
   fi
-  local PS1_RTN="${PURPLE}rtn${WHITE}:${PS1_RTN_COL}${LAST_CMD}"
+  #local PS1_RTN="${PURPLE}rtn${WHITE}:${PS1_RTN_COL}${LAST_CMD}"
 
   # who am i
   local PS1_WHOAMI="${BBLACK}[${WHITE}${USER}${WHITE}${BBLACK}@${WHITE}${HOSTNAME%%.*}${BBLACK}]"
@@ -415,8 +462,8 @@ function create_ps() {
   if [ $SIMPLEPS -eq 0 ] ; then
   export PS1="\
 ${BLACK}_______________________________________________________________________________${NC}
-${PS1_HIST} ${PS1_TIME} ${PS1_LOAD} ${PS1_JOBS} ${PS1_RTN}${NC}
-${PS1_WHOAMI} ${PS1_PWD}${PS1_SYB}${NC} " # _PS1_
+${PS1_HIST} ${PS1_WHOAMI}  ${PS1_LOAD}  ${PS1_JOBS}${NC}
+${PS1_PWD}${PS1_RTN}${PS1_SYB}${NC} " # _PS1_
   else
   export PS1="[\u@\h \w] \$ " # _PS1_
   fi
@@ -456,7 +503,7 @@ function tard() {
   tarc $FILEIN.tgz $FILEIN && /bin/rm -rf $FILEIN && echo "tard: removed $FILEIN, complete."
 }
 
-# what is some command? (didn't work as external script)
+# what is some command, can't run in subprocess
 function whats() {
   echo -e "${CMDCOL}alias:${NC}"
   alias "$1"
