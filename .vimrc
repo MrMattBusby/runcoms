@@ -1,7 +1,7 @@
 ".vimrc
-" Vi IMproved run command.
+" Vi IMproved Run Command.
 "
-" Copyright (c) 2009-2015, Matt Busby @MrMattBusby.
+" Copyright (c) 2009-2016, Matt Busby @MrMattBusby.
 " All rights reserved.
 "
 " Redistribution and use in source and binary forms, with or without

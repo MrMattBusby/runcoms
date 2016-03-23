@@ -1,7 +1,7 @@
 # .bashrc
 # Bourne Again SHell Run Command.
 # 
-#   Copyright (c) 2009-2015, Matt Busby @MrMattBusby.
+#   Copyright (c) 2009-2016, Matt Busby @MrMattBusby.
 #   All rights reserved.
 #
 #   Redistribution and use in source and binary forms, with or without
@@ -32,12 +32,6 @@
 #   LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
 #   WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 #   POSSIBILITY OF SUCH DAMAGE.
-#
-### TODO ###
-#
-#   * Customize this .bashrc by changing any values tags with _TODO_
-#   * Add a ~/.bashrc_custom for personalizations
-#
 
 ### if not running interactively, don't do anything ###
 [ -z "$PS1" ] && return
@@ -48,6 +42,9 @@ if [ -f /etc/bashrc ]; then
 fi
 if [ -f /etc/bash_completion ]; then
   . /etc/bash_completion
+fi
+if [ -f ~/.bashrc_custom ]; then
+  . ~/.bashrc_custom
 fi
 
 ### shell settings / vim mode ###
@@ -66,24 +63,27 @@ shopt -s histappend # append history among shell sessions
 export FALSE=0
 export TRUE=1
 
-export NAME=m_busby # _TODO_
-export EDITOR=/usr/bin/vim #/usr/local/bin/vim # _TODO_
-export HISTSIZE=3000
-export HISTFILESIZE=3000
+#export BROWSER # See ~/.bash_profile
+#export EDITOR # See ~/.bashrc_custom
 export HISTCONTROL=ignoreboth # don't add cmds w/ '^ ' to history, also ignores dupes
+export HISTFILESIZE=3000
+export HISTSIZE=3000
 export HOSTS=/etc/hosts
-export LC_ALL="C" #en_US.UTF-8
 export LANG="C"
 export LANGUAGE="C"
+export LC_ALL="C" #en_US.UTF-8
 export LC_COLLATE="C"
+#export NAME # See ~/.bashrc_custom
 export NUL=/dev/null
+#export PATH # See ~/.bash_profile
 export PYTHONIOENCODING=utf_8
-export PYTHONSTARTUP=~/.pythonrc # _TODO_
-export PYTHONPATH=~/bin:~/scripts:~/git # _TODO_
+#export PYTHONPATH # See ~/.bashrc_custom
+#export PYTHONSTARTUP # See ~/.bashrc_custom
 export SERR=/dev/stderr
 export SIMPLEPS=$FALSE
 export SIN=/dev/stdin
 export SOUT=/dev/stdout
+#export TERM # See ~/.bash_profile
 
 # anaconda priority
 if [ -d ~/anaconda/bin ] ; then
@@ -109,6 +109,7 @@ alias ipy='ipython'
 alias less='less -R'  # decode colors
 alias ln='ln -i' # for safety
 alias ls='ls --color=auto' # better with colors
+alias md='md_func' # read markdown
 alias mkdir='mkdir -pv' # create parents
 alias mv='mv -i' # for safety
 alias ping='ping -i.5 -c4 -W1' # send 4 packets, no need ^C
@@ -194,7 +195,7 @@ function d() {
     echo -e "${CMDCOL}usage:${NC} d arg1 arg2.."
   else
     echo -e "${CMDCOL}diffuse -w $@ &${NC}"
-    diffuse -w $@ &
+    diffuse -w "$@" &
   fi
 }
 function ff() {
@@ -203,14 +204,18 @@ function ff() {
 function image() {
   gthumb "$@" &
 }
-function md() {
+function md_func() {
   # view a markdown file via pandoc/firefox
   if [ $# -ne 1 ] ; then
     echo -e "${CMDCOL}md: Use one input parameter!${NC}"
   else
-    echo -e "${CMDCOL}pandoc $1 -o "/tmp/$1.html" ; firefox "/tmp/$1.html" &${NC}"
-    pandoc $1 -o "/tmp/$1.html" 
-    firefox "/tmp/$1.html" &
+    if [ $(command -v pandoc) ] ; then
+      local BN=$(basename "$1")
+      echo -e "${CMDCOL}pandoc $1 -o "/tmp/${BN}.html" && firefox "/tmp/${BN}.html" &${NC}"
+      pandoc $1 -o "/tmp/${BN}.html" && firefox "/tmp/${BN}.html" &
+    else
+      echo -e "${CMDCOL}md: pandoc is required!${NC}"
+    fi
   fi
 }
 function pdf() {
@@ -221,14 +226,14 @@ function pdf() {
 alias m='make'
 alias mcm='make clean && make'
 
-# svn diff x | le
+# svn diff x | less
 function sd() {
-  if command -v colordiff &>/dev/null ; then svn diff $@ | colordiff | less -R ; else svn diff $@ | less ; fi
+  if command -v colordiff &>/dev/null ; then svn diff "$@" | colordiff | less -R ; else svn diff "$@" | less ; fi
 }
 
-# svn log -v x | le# svn log -v x | le
+# svn log -v x | less # svn log -v x | less
 function sl() {
-  if [ $# -eq 0 ] ; then svn log -v | less ; else svn log -v $@ | less ; fi
+  svn log -v "$@" | less
 }
 
 alias st='svn st' # | /bin/grep -v ^?'
@@ -493,7 +498,7 @@ function tar_func() {
   echo -e "${CMDCOL}\$ tar $@${NC}"
   echo -e "${CMDCOL}tar: verify package $2 [Enter/^C]?${NC}"
   read -n 1 -s
-  /bin/tar $@
+  /bin/tar "$@"
 }
 
 # tar/gzip a folder then remove it
@@ -543,7 +548,7 @@ function print() {
 ### startup actions ###
 case "$-" in
   *i*) # only in interactive mode
-    source ~/bin/setcolors &> $NUL # _TODO_
+    source ~/bin/setcolors &> $NUL
     pushd ~ &> $NUL
     ulimit unlimited
     ulimit -c unlimited
@@ -576,8 +581,3 @@ echo -ne "\033]0;${USER} @ ${HOSTNAME}\007";'
   *)
     ;;
 esac
-
-### source custom definitions ###
-if [ -f ~/.bashrc_custom ]; then
-  source ~/.bashrc_custom
-fi
