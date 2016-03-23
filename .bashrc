@@ -449,8 +449,8 @@ function create_ps() {
   local PS1_WHOAMI="${BBLACK}[${WHITE}${USER}${WHITE}${BBLACK}@${WHITE}${HOSTNAME%%.*}${BBLACK}]"
 
   # pwd
-  #local L_PWD=$(pwd -P)
-  local L_PWD=$(pwd)
+  local L_PWD=$(pwd -P)
+  #local L_PWD=$(pwd)
   if [ ${#L_PWD} -le 32 ]
   then local PS1_PWD="${BBLUE}${L_PWD}/"
   else local PS1_PWD="${BBLUE}..$(echo -e $L_PWD | egrep -o '.{0,32}$')/"
