@@ -118,6 +118,7 @@ alias rm='rm -i' # for safety
 alias screen='screen' # or 'byobu' (excellent wrapper but isn't common)
 alias tar='tar_func' # for safety/prevent overwrite
 alias top='htop 2> $NUL || /usr/bin/top' # htop not always exist
+alias netdatalaunch='firefox localhost:19999 &' # /usr/sbin/netdata must be running (firehol/netdata)
 alias tree='tree -aCAS' # cleaner
 alias units='man units | tail --lines +9 | head -46' # info. version-dependant
 alias vi='if [ -f /etc/vimrc ] ; then /usr/bin/vim -u /etc/vimrc; else /usr/bin/vim -u NONE; fi' # default VI
