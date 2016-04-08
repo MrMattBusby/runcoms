@@ -65,10 +65,11 @@ import re
 import math
 from datetime import datetime as dt
 from pprint import pprint
-# try:
-#     import pandas as pd
-# except ImportError:
-#     print(".pythonrc: no pandas module found, skipping...")
+try:
+    import pandas as pd # Load time is lengthy!
+except ImportError:
+    #print(".pythonrc: no pandas module found, skipping...")
+    pass
 try:
     import numpy as np
 except ImportError:
@@ -125,32 +126,30 @@ del DIR
 
 # Useful when interactive
 b = True
-c = 'a'
+c = 'A'
 s = 'Hello World!\n'
-f = 123.456789
-i = 123
-n = 2^64+1
-x = complex(i, -1)
-l = [1.1, 2.2, 3.3]
+f = math.e
+i = 2**32
+n = 2L**64
+x = complex(1, -1)
+l = [f, i, n]
 t = tuple(l)
-d = {'a': i, 'b': f, 'c': l}
+d = {'b':b, 'c':c, 's':s, 'f':f, 'i':i, 'n':n, 'x':x, 'l':l, 't':t}
 try:
-    a = np.array([l, [2 * each for each in l]])
+    a = np.array([[f, 2*f, 3*f], [10*f, 20*f, 30*f]])
 except NameError:
-    a = [l, [2 * each for each in l]]
+    a = [[f, 2*f, 3*f], [10*f, 20*f, 30*f]]
 class O(object):
     def __init__(self):
-        self.c = c
-        self.i = i
-        self.f = f
+        self.__dict__ = d
 o = O()
 try:
-    p = pd.DataFrame(data={'DataA': a[0], 'DataB': a[1]}, index=[0, 1, 2])
+    p = pd.DataFrame(data={'A': a[0], 'B': a[1]}, index=[0, 1, 2])
 except NameError:
     p = None
 e = set(l)
 r = iter(l)
-m = lambda: None
+m = lambda: l
 
 ######################## Globals ##############################################
 
