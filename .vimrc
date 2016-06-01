@@ -266,14 +266,14 @@ set synmaxcol=2048
 "==============================================================================
 
 " Match on word click
-nnoremap <silent> <leader>h :if AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
+nnoremap <silent> <leader>h :if AutoHighlightToggle()<Bar>set hls<Bar>else match<Bar>nohls<Bar>endif<CR>
 function! AutoHighlightToggle()
   "let @/ = ''
   if exists('#auto_highlight')
     au! auto_highlight
     augroup! auto_highlight
     setl updatetime=4000
-    "echo 'Highlight current word: off'
+    echo 'Highlight current word: off'
     return 0
   else
     augroup auto_highlight
@@ -281,11 +281,12 @@ function! AutoHighlightToggle()
       au auto_highlight CursorHold * silent! exe printf('match IncSearch /\<%s\>/', expand('<cword>'))
       "au CursorHold * let @/ = '\V\<'.escape(expand('<cword>'), '\').'\>'
     augroup end
-    setl updatetime=1000
-    "echo 'Highlight current word: ON'
+    setl updatetime=250
+    echo 'Highlight current word: ON'
     return 1
   endif
 endfunction
+silent! call AutoHighlightToggle()
 
 " Make tag file when saving file, ignore all errors, mark ~2
 """autocmd VimEnter,BufWritePost *.cpp,*.hpp,*.c,*.h silent! execute "!gen_tags.sh " . GetBuffNames()

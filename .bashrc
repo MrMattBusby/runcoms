@@ -103,6 +103,7 @@ alias cim='vim' # because typo
 alias cp='cp -i' # for safety
 alias echo='echo -e' # interpret backslash
 alias free='free -tm' # totals
+alias info='info --vi-keys'
 alias iostat='iostat -xhm' # more info
 alias ipq='ipython qtconsole &'
 alias ipy='ipython'
@@ -110,6 +111,7 @@ alias less='less -R'  # decode colors
 alias ln='ln -i' # for safety
 alias ls='ls --color=auto' # better with colors
 alias md='md_func' # read markdown
+alias mf='mv' # typo, haven't ever used mf
 alias mkdir='mkdir -pv' # create parents
 alias mv='mv -i' # for safety
 alias ping='ping -i.5 -c4 -W1' # send 4 packets, no need ^C
@@ -119,7 +121,7 @@ alias screen='screen' # or 'byobu' (excellent wrapper but isn't common)
 alias tar='tar_func' # for safety/prevent overwrite
 alias top='htop 2> $NUL || /usr/bin/top' # htop not always exist
 alias netdatalaunch='firefox localhost:19999 &' # /usr/sbin/netdata must be running (firehol/netdata)
-alias tree='tree -aCAS' # cleaner
+alias tree='tree -NFCAS' # cleaner
 alias units='man units | tail --lines +9 | head -46' # info. version-dependant
 alias vi='if [ -f /etc/vimrc ] ; then /usr/bin/vim -u /etc/vimrc; else /usr/bin/vim -u NONE; fi' # default VI
 
@@ -180,8 +182,8 @@ alias tarx='tar -xzvpf' # tar aliased to tar_func() for safety
 alias topcpu='ps | head -1 && /bin/ps auxfh | sort -nr -k 3 | head'
 alias topmem='ps | head -1 && /bin/ps auxfh | sort -nr -k 4 | head'
 alias topme='ps | head -1 && ps auxfh | egrep $USER | sort -nr -k 3 | head | grep $USER'
-alias treed='\tree -dCASL 4' # dir only 3 deep
-alias trees='\tree -hpCASL 3' # files 2 deep
+alias treed='tree -dL 4' # dir only 3 deep
+alias trees='tree -hpL 3' # files 2 deep
 alias v='vim'
 
 ### programs/filetypes ###
@@ -237,7 +239,7 @@ function sl() {
   svn log -v "$@" | less
 }
 
-alias st='svn st' # | /bin/grep -v ^?'
+alias st='svn st | /bin/grep -v ^?'
 alias svn_count='svn log -q | grep "|" | awk "{print \$3}" | sort | uniq -c | sort -nr'
 alias up='svn up'
 
@@ -315,7 +317,7 @@ function me() {
   local DATE=$(date | xargs)
 
   echo -e "${BWHITE}User  ${BBLACK}: ${WHITE}$USER:$EUID ($HOME)"
-  echo -e "${BWHITE}Shell ${BBLACK}: ${WHITE}$SHELL ($TERM: $TTYINFO of $WHOINFO)"
+  echo -e "${BWHITE}Shell ${BBLACK}: ${WHITE}$SHELL $BASHPID ($TERM: $TTYINFO of $WHOINFO)"
   echo -e "${BWHITE}Host  ${BBLACK}: ${WHITE}${HOSTNAME} ${DISPLAY} ($HOSTINFO1: $HOSTINFO2)"
   echo -e "${BWHITE}PC    ${BBLACK}: ${WHITE}$PC_INFO x$PC_NUM"
   echo -e "${BWHITE}Loads ${BBLACK}: ${WHITE}${LOAD}% ${AVG[@]::4} Mem:${MEM[1]}(${CACHE})/${MEM[0]}Mb Swap:${SWP[1]}/${SWP[0]}Mb"
@@ -509,28 +511,83 @@ function tard() {
   tarc $FILEIN.tgz $FILEIN && /bin/rm -rf $FILEIN && echo "tard: removed $FILEIN, complete."
 }
 
-# what is some command, can't run in subprocess
+# what is X? (can't run in subprocess), if not file/command try locate/apropos before failing
 function whats() {
-  echo -e "${CMDCOL}alias:${NC}"
-  alias "$1"
-  echo
-  echo -e "${CMDCOL}type -a:${NC}" 
-  type -a "$1"
-  echo
-  echo -e "${CMDCOL}which:${NC}" 
-  local FILERSLT=$(file $(which $1 | tail -1 | tr -d '\n') 2> /dev/null)
-  which "$1" && echo && echo -e "${CMDCOL}file \$(which):${NC}" && echo -e "$FILERSLT"
-  if [ $(echo -en "$FILERSLT" | grep -ic executable) -le 1 ] ; then
-    if [ $(echo -en "$FILERSLT" | grep -ic text) -ge 1 ] ; then
-      echo && echo -e "${CMDCOL}head \$(which):${NC}" && head $(which $1 | tail -1 | tr -d '\n') 2> /dev/null
+  local ANY=0
+  local RESULT=
+  local OUTPUT=
+  local COMMAND=
+  local WCL=
+  local COMMANDS=(
+  'readlink -e'
+  'alias'
+  'type -a'
+  'which -a'
+  'whatis'
+  'file -Eb'
+  'stat'
+  'la'
+  'lsattr'
+  'du -h'
+  'head -1'
+  'wc'
+  'sum'
+  'md5sum'
+  'man -w'
+  'info -w'
+  )
+  for each in "${COMMANDS[@]}" ; do
+    COMMAND="$each"
+    each+=' "$1" 2>/dev/null'
+    OUTPUT=$(eval "$each")
+    RESULT=$?
+    WCL=$(echo "$OUTPUT"|wc -l)
+    if [ $RESULT == 0 ] ; then
+      ((ANY++))
+      echo
+      echo -e "${CMDCOL}${COMMAND}:${NC}"
+      if [ "$WCL" -le 30 ] ; then
+        echo "$OUTPUT"
+      else
+        echo "$OUTPUT" | head -30
+        echo "..."
+      fi
+    fi
+  done
+  if [ $ANY -eq 0 ] ; then
+    OUTPUT=$(locate "$1" 2>/dev/null)
+    RESULT=$?
+    WCL=$(echo "$OUTPUT"|wc -l)
+    if [ $RESULT == 0 ] ; then
+      ((ANY++))
+      echo
+      echo -e "${CMDCOL}locate:${NC}"
+      if [ "$WCL" -le 30 ] ; then
+        echo "$OUTPUT"
+      else
+        echo "$OUTPUT" | head -30
+        echo "..."
+      fi
+    fi
+    OUTPUT=$(apropos "$1" 2>/dev/null)
+    RESULT=$?
+    WCL=$(echo "$OUTPUT"|wc -l)
+    if [ $RESULT == 0 ] ; then
+      ((ANY++))
+      echo
+      echo -e "${CMDCOL}apropos:${NC}"
+      if [ "$WCL" -le 30 ] ; then
+        echo "$OUTPUT"
+      else
+        echo "$OUTPUT" | head -30
+        echo "..."
+      fi
     fi
   fi
-  echo 
-  echo -e "${CMDCOL}whatis:${NC}" 
-  whatis "$1"
-  echo
-  echo -e "${CMDCOL}apropos | head:${NC}" 
-  apropos "$1" | head 2> /dev/null
+  if [ $ANY -eq 0 ] ; then
+    >&2 echo "whats: cannot find '$1'!"
+    return 1
+  fi
 }
 
 # wiki a word or phrase in quotes
