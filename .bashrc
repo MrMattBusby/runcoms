@@ -308,7 +308,7 @@ function me() {
   local IP=$(/sbin/ifconfig|egrep -o "(inet addr:|inet )[0-9\.]*" | sed "s/inet addr://" | sed "s/inet //" | xargs | sed 's/ /, /g')
   local OS=$(cat /etc/redhat-release 2>/dev/null || cat /etc/issue 2>/dev/null | head -1 | sed 's/^\s*//' | sed 's/\s*$//')
   local UNAME="$(uname -o) $(uname -r)"
-  local VGREP=$(grep --version|head -1|grep -o "[0-9]\?\.[0-9]\?\.[0-9]")
+  local VGREP=$(grep --version|head -1|\egrep -o "[0-9]+(\.[0-9]+)+")
   local VGNU=$(gnuplot --version|sed 's| patch.*||' | tr ' ' ':')
   local VGCC=$(gcc --version|head -1|egrep -o '\(GCC\) .\..\..'|sed 's|(GCC) ||')
   local VVIM=$(vim --version|head -1|egrep -o '.\..')
