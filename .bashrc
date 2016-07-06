@@ -91,7 +91,6 @@ if [ -d ~/anaconda/bin ] ; then
 fi
 
 ### !!! OVERWRITES !!! ###
-alias ascii='man ascii | tail --lines +19 | head -89' # info. version-dependant
 alias bpy='bpython-curses'
 alias cal='cal -3s'
 alias chgrp='chgrp --preserve-root' # perms
@@ -118,12 +117,13 @@ alias ping='ping -i.5 -c4 -W1' # send 4 packets, no need ^C
 alias ps='ps auxf' # verbose
 alias rm='rm -i' # for safety
 alias screen='screen' # or 'byobu' (excellent wrapper but isn't common)
+alias ssh='ssh -Y' # FW X
 alias tar='tar_func' # for safety/prevent overwrite
 alias top='htop 2> $NUL || /usr/bin/top' # htop not always exist
 alias netdatalaunch='firefox localhost:19999 &' # /usr/sbin/netdata must be running (firehol/netdata)
 alias tree='tree -NFCAS' # cleaner
 alias units='man units | tail --lines +9 | head -46' # info. version-dependant
-alias vi='if [ -f /etc/vimrc ] ; then /usr/bin/vim -u /etc/vimrc; else /usr/bin/vim -u NONE; fi' # default VI
+alias vi='if [ -f /etc/vimrc ] ; then /usr/bin/vim -u /etc/vimrc; else /usr/bin/vim -u NONE; fi' # default VI for laypeople
 
 ### typos ###
 alias cd..="cd .."
@@ -224,6 +224,16 @@ function md_func() {
 function pdf() {
   evince "$@" &
 }
+function pep8() {
+  if [ $# -eq 1 ] ; then
+    \cp -f "$1" ."$1".orig
+    autopep8 --aggressive --in-place "$1"
+  elif [ $# -eq 2 ] ; then
+    autopep8 --aggressive "$1" > "$2"
+  else
+    echo -e "${CMDCOL}pep8: see \`autopep8 --help\`!${NC}"
+  fi
+}
 
 ### devel ###
 alias m='make'
@@ -246,6 +256,7 @@ alias up='svn up'
 ### edit startup scripts ###
 alias vibu='vim ~/bin/backup'
 alias vib='vim ~/.bashrc'
+alias vif='vim ~/bin/f' # Eh I edit this enough
 alias vii='vim ~/.ipython/ipythonrc'
 alias vik='vim ~/.ssh/known_hosts'
 alias vip='vim ~/.pythonrc'
