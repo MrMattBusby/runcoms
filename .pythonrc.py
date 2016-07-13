@@ -56,9 +56,10 @@ __license__   = """\
         POSSIBILITY OF SUCH DAMAGE.
         """.format(copyright=__copyright__)
 
-######################## Imports ##############################################
+######################## Imports/Globals ######################################
 
 import os
+import pwd
 import sys
 import time
 import re
@@ -85,10 +86,19 @@ import readline
 import rlcompleter
 readline.parse_and_bind("tab: complete")
 
+# Initial environment variables, static
+HOME = os.path.expanduser('~')       # String
+NULL = '\0'                          # String
+NUL  = os.devnull                    # String
+SERR = sys.stderr                    # File object
+SIN  = sys.stdin                     # File object
+SOUT = sys.stdout                    # File object
+USER = pwd.getpwuid(os.getuid())[0]  # String
+
 # Import constants and pyutils
 import imp
 try:
-    imp.load_source('pyutils', os.path.expanduser('~') + '/scripts/pyutils.py')
+    imp.load_source('pyutils', HOME + '/scripts/pyutils.py')
     try:
         from pyutils import *
         ENV = Env()
@@ -99,7 +109,7 @@ except IOError:
     # print(".pythonrc: no pyutils.py found, skipping...")
     pass
 try:
-    imp.load_source('consts', os.path.expanduser('~') + '/scripts/consts.py')
+    imp.load_source('consts', HOME + '/scripts/consts.py')
     try:
         import consts as C
     except:
@@ -111,16 +121,38 @@ except IOError:
 del imp
 
 # Add to path
-DIR = os.path.expanduser('~')+'/scripts'
+DIR = HOME + '/scripts'
 if os.path.exists(DIR) and DIR not in sys.path:
     sys.path.append(DIR)
-DIR = os.path.expanduser('~')+'/bin'
+DIR = HOME + '/bin'
 if os.path.exists(DIR) and DIR not in sys.path:
     sys.path.append(DIR)
-DIR = os.path.expanduser('~')+'/git'
+DIR = HOME + '/git'
 if os.path.exists(DIR) and DIR not in sys.path:
     sys.path.append(DIR)
 del DIR
+
+# Patch math
+math.tau = 2. * math.pi
+tau = math.tau
+
+# Infinite and Nan should be std type
+try:
+    math.inf = float('inf')
+    math.nan = float('nan')
+except ValueError:
+    try:
+        math.inf = float('1.#INF')
+        math.nan = float('1.#IND')  # Indeterminate
+    except ValueError:
+        try:
+            math.inf = 1e3000
+            math.nan = math.inf-math.inf
+        except (ValueError, OverflowError):
+            math.inf = 9.999999999999999999999999e307
+            math.nan = -math.inf # Give up
+inf = math.inf
+nan = math.nan
 
 ######################## Dummy Data ###########################################
 
@@ -151,46 +183,16 @@ e = set(l)
 r = iter(l)
 m = lambda: l
 
-######################## Globals ##############################################
-
-# Initial environment variables, static
-HOME = os.path.expanduser('~')  # String
-NULL = '\0'                     # String
-NUL  = os.devnull               # String
-SERR = sys.stderr               # File object
-SIN  = sys.stdin                # File object
-SOUT = sys.stdout               # File object
-USER = os.getlogin()            # String
-
-# Patch math
-math.tau = 2. * math.pi
-tau = math.tau
-
-# Infinite and Nan should be std type
-try:
-    math.inf = float('inf')
-    math.nan = float('nan')
-except ValueError:
-    try:
-        math.inf = float('1.#INF')
-        math.nan = float('1.#IND')  # Indeterminate
-    except ValueError:
-        try:
-            math.inf = 1e3000
-            math.nan = math.inf-math.inf
-        except (ValueError, OverflowError):
-            math.inf = 9.999999999999999999999999e307
-            math.nan = -math.inf # Give up
-inf = math.inf
-nan = math.nan
-
 ######################## Functions ############################################
 
 def _welcome():
+    """Prints system info, etc."""
     import platform
     import time
-    """Prints system info, etc."""
-    print("""
+    print(
+"""\
+_______________________________________________________________________________
+
 Python {0} for {8} on {6} {1} {2}
 {7}
 {3}@{4} in {5}
@@ -198,11 +200,12 @@ _______________________________________________________________________________
 """.format('.'.join(str(idx) for idx in sys.version_info[0:3]),             # 0
            platform.uname()[0].title(),                                     # 1
            platform.uname()[2][:platform.uname()[2].find('-')].title(),     # 2
-           os.getlogin(),                                                   # 3
+           USER,                                                            # 3
            platform.node(),                                                 # 4
            os.getcwd(),                                                     # 5
            os.name.upper(),                                                 # 6
-           time.strftime("%a %d %b %y %H:%M %Z w%W d%j", time.localtime()), # 7
+           time.strftime("%a, %d %b %y - %H:%M %Z - w%W, d%j",
+                         time.localtime()),                                 # 7
            ' '.join(platform.linux_distribution())))                        # 8
     del platform, time
 

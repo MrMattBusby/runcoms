@@ -40,7 +40,7 @@ fi
 
 # User specific environment and startup programs
 
-PATH=$HOME/bin:$PATH
+PATH=$HOME/bin:$PATH:$HOME/.local/bin
 export PATH
 
 if [ -x /usr/bin/firefox ] ; then
