@@ -260,7 +260,7 @@ alias vif='vim ~/bin/f' # Eh I edit this enough
 alias vii='vim ~/.ipython/ipythonrc.py'
 alias vik='vim ~/.ssh/known_hosts'
 alias vip='vim ~/.pythonrc.py'
-alias vipu='vim ~/scripts/pyutils.py'
+alias vipu='vim ~/bin/pyutils.py'
 alias vis='vim ~/.screenrc'
 alias viv='vim ~/.vimrc'
 

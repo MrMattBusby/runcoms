@@ -35,5 +35,5 @@
 
 export EDITOR=/usr/bin/vim
 export NAME=m_busby
-export PYTHONPATH=~/bin:~/scripts:~/git
+export PYTHONPATH=~/bin # ~/.local/lib/python2.7/site-packages
 export PYTHONSTARTUP=~/.pythonrc.py
