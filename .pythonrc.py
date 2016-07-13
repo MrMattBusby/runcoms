@@ -17,12 +17,12 @@ from __future__ import print_function, with_statement, division
 ######################## Metadata #############################################
 
 # Metadata, used in $ pydoc ./%
-__creator__   = "Matt Busby"
-__email__     = "@MrMattBusby"
-__author__    = "{0} {1}".format(__creator__, __email__)
-__date__      = "2010-2016"
-__copyright__ = "Copyright (c) {year}, {owner}. All rights reserved.".format(\
-        year=__date__, owner=__creator__)
+__creator__ = "Matt Busby"
+__email__ = "@MrMattBusby"
+__author__ = "{0} {1}".format(__creator__, __email__)
+__date__ = "2010-2016"
+__copyright__ = "Copyright (c) {year}, {owner}. All rights reserved.".format(
+    year=__date__, owner=__creator__)
 __license__   = """\
         {copyright}
 
@@ -70,7 +70,7 @@ import sys
 import time
 from datetime import datetime
 try:
-    import pandas as pd # Load time is lengthy!
+    import pandas as pd  # Load time is lengthy!
 except ImportError:
     #print(".pythonrc: no pandas module found, skipping...")
     pass
@@ -90,19 +90,20 @@ import rlcompleter
 readline.parse_and_bind("tab: complete")
 
 # Initial environment variables, static
-ARCHP = platform.architecture()[0]               # String (not reliable in OSX)
-ARCH = ("32bit","64bit")[(struct.calcsize("P") == 8)] # String
+ARCHP2 = platform.architecture()[0]              # String (not reliable in OSX)
+ARCHP = ("32bit", "64bit")[(struct.calcsize("P") == 8)] # String (for python)
 CWD = os.getcwd()                                # String
 DISTRO = ' '.join(platform.linux_distribution()) # String
 LS = os.listdir('.')                             # List
 HOME = os.path.expanduser('~')                   # String
 HOST = platform.node()                           # String
+MACH = platform.uname()[-2]                      # String
 NULL = '\0'                                      # String
 NUL = os.devnull                                 # String (location of..)
 OS = os.uname()                                  # List
 OSNAME = os.name.upper()                         # String
 OSTITL = platform.uname()[0].title()             # String
-OSVER = platform.uname()[2][:platform.uname()[2].find('-')].title() # String
+OSVER = platform.uname()[2][:platform.uname()[2].find('-')].title()  # String
 PLAT = sys.platform.upper()                      # String
 PROC = platform.uname()[-1]                      # String
 SERR = sys.stderr                                # File object
@@ -163,12 +164,15 @@ n = 2**64
 x = complex(1, -1)
 l = [f, i, n]
 t = tuple(l)
-d = {'b':b, 'c':c, 's':s, 'f':f, 'i':i, 'n':n, 'x':x, 'l':l, 't':t}
+d = {'b': b, 'c': c, 's': s, 'f': f, 'i': i, 'n': n, 'x': x, 'l': l, 't': t}
 try:
-    a = np.array([[f, 2*f, 3*f], [10*f, 20*f, 30*f]])
+    a = np.array([[f, 2 * f, 3 * f], [10 * f, 20 * f, 30 * f]])
 except NameError:
-    a = [[f, 2*f, 3*f], [10*f, 20*f, 30*f]]
+    a = [[f, 2 * f, 3 * f], [10 * f, 20 * f, 30 * f]]
+
+
 class O(object):
+
     def __init__(self):
         self.__dict__ = d
 o = O()
@@ -182,9 +186,10 @@ m = lambda: l
 
 ######################## Classes ##############################################
 
+
 class Switch(object):
     """Emulate a C switch statement. Not the fastest but is easy and no lambda.
-    
+
     Source: http://code.activestate.com/recipes/410692/.
 
     Usage:
@@ -207,7 +212,7 @@ class Switch(object):
         """Return the match method once, then stop."""
         yield self.match
         raise StopIteration
-    
+
     def match(self, *args):
         """Indicate whether or not to enter a case suite."""
         if self.fall or not args:
@@ -221,6 +226,7 @@ class Switch(object):
 ######################## Functions ############################################
 
 # OS/file/IO
+
 
 def find_pids(name, ignores=['grep', 'gdb', 'ssh']):
     """Find processes by name (w/out psutil)."""
@@ -242,6 +248,7 @@ def find_pids(name, ignores=['grep', 'gdb', 'ssh']):
                 olist.append(int(pid))
     return olist
 
+
 def perror(string):
     """Print to std err in python < 2.7."""
     try:
@@ -254,6 +261,7 @@ def perror(string):
     #"""Print to std err."""
     #print(string, sep='', end='\n', file=sys.stderr)
 
+
 def file_parser(filename):
     """Convenience generator yielding rstipped lines in a file."""
     try:
@@ -265,6 +273,7 @@ def file_parser(filename):
     except IOError:
         raise StopIteration
 
+
 def read_lines(filename):
     """Open a file returning list of lines (strings)."""
     lines = []
@@ -275,8 +284,9 @@ def read_lines(filename):
         perror(">>> open_as_lines: Error opening file {0}.".format(filename))
     return lines
 
-def read_csv(filename, delimiter=',', ig_blank_char=True, ig_blank_line=True, 
-        header_cnt=0, ig_chars=r'-/#', check_cnt=0):
+
+def read_csv(filename, delimiter=',', ig_blank_char=True, ig_blank_line=True,
+             header_cnt=0, ig_chars=r'-/#', check_cnt=0):
     """Open a csv file returning list of lines (delimited list of strings)."""
     props = csv.excel()
     props.delimiter = delimiter
@@ -304,9 +314,10 @@ def read_csv(filename, delimiter=',', ig_blank_char=True, ig_blank_line=True,
         perror(">>> open_csv: Error opening file {0}.".format(filename))
     return lines
 
+
 def locate(pattern, start_dir='.'):
     """Locate a pattern recursively from the start directory returning a list.
-    
+
     Essentially a recursive glob returning absolute filenames as strings.
 
     Usage:
@@ -327,6 +338,7 @@ def locate(pattern, start_dir='.'):
             matches.append(os.path.join(path, filename))
     return matches
 
+
 def find(file, quiet=True):
     """Find and return the first filename globbed."""
     import glob
@@ -339,25 +351,29 @@ def find(file, quiet=True):
         perror(">>> find: Found more than one match, using first result!")
     return results[0]
 
+
 def wait(seconds=1):
     """Sleeps for seconds, can be fractional."""
     time.sleep(seconds)
 
+
 def pause():
     """Pause until enter."""
-    try: 
+    try:
         raw_input(">>> Press ENTER to continue...")
     except KeyboardInterrupt:
         pass
 
+
 def cls():
     """Clear screen."""
-    try: 
+    try:
         os.system("clear")
     except:  # Grabs all..
         pass
 
 # Strings/iterable
+
 
 def any_in(iter1, iter2):
     """Return if any of the items in iter1 are in iter2."""
@@ -366,6 +382,7 @@ def any_in(iter1, iter2):
         if item in iter2:
             return True
     return False
+
 
 def cnt_in(iter1, iter2):
     """Return count of the items in iter1 also in iter2."""
@@ -387,10 +404,10 @@ except ValueError:
     except ValueError:
         try:
             math.inf = 1e3000
-            math.nan = math.inf-math.inf
+            math.nan = math.inf - math.inf
         except (ValueError, OverflowError):
             math.inf = 9.999999999999999999999999e307
-            math.nan = -math.inf # Give up
+            math.nan = -math.inf  # Give up
 inf = math.inf
 nan = math.nan
 
@@ -398,70 +415,83 @@ nan = math.nan
 math.tau = 2. * math.pi
 tau = math.tau
 
-def round_near(ival, near):
+
+def round_near(ival, near=1.0):
     """Round input to closest fraction.
-    
+
     In [1]: round_near(4.567, 1/5.)
     Out[1]: 4.6
-    
+
     """
     return round(ival / near) * near
 math.round_near = round_near
 
+
 def csc(rad):
     """Return cosecant of an angle in radians."""
-    return 1./math.sin(rad)
+    return 1. / math.sin(rad)
 math.csc = csc
+
 
 def cot(rad):
     """Return cotangent of an angle in radians."""
-    return 1./math.tan(rad)
+    return 1. / math.tan(rad)
 math.cot = cot
+
 
 def sec(rad):
     """Return secant of an angle in radians."""
-    return 1./math.cos(rad)
+    return 1. / math.cos(rad)
 math.sec = sec
+
 
 def log2(var):
     """Return log base 2 of var."""
     return log(var, 2)
 math.log2 = log2
 
+
 def log3(var):
     """Return log base 3 of var."""
     return log(var, 3)
 math.log3 = log3
+
 
 def loge(var):
     """Return log base e of var."""
     return math.log(var)
 math.loge = loge
 
+
 def ln(var):
     """Return log base e of var."""
     return math.log(var)
 math.ln = ln
 
-def cbrt(var): 
+
+def cbrt(var):
     """Return cubed root of var."""
-    return math.pow(var, (1./3))
+    return math.pow(var, (1. / 3))
 math.cbrt = cbrt
 
-def angle(y, x): 
+
+def angle(y, x):
     """Return angle (atan2) of y, x."""
     return math.atan2(y, x)
 math.angle = angle
 
-def diff(var1, var2): 
+
+def diff(var1, var2):
     """Return difference between two variables."""
     return abs(var1 - var2)
 math.diff = diff
 
-def count(var1, var2): 
+
+def count(var1, var2):
     """Return count between two variables, including start."""
     return abs(var1, var2) + 1
 math.count = count
+
 
 def isodd(var):
     """Return whether var is odd."""
@@ -473,6 +503,7 @@ def isodd(var):
         return var is not 0 and var & 1
 math.isodd = isodd
 
+
 def iseven(var):
     """Return whether var is even, 0 is not even."""
     # Faster than %
@@ -483,6 +514,7 @@ def iseven(var):
         return var is not 0 and not isodd(var)
 math.iseven = iseven
 
+
 def ispow2(var):
     """Return whether var is a real power of 2."""
     try:
@@ -491,10 +523,12 @@ def ispow2(var):
         return ispow(var, 2)
 math.ispow2 = ispow2
 
+
 def ispow(var, of):
     """Return whether var is a real power of _."""
     return not math.log(var, of) % 1 if var and of else False
 math.ispow = ispow
+
 
 def sign(var):
     """Return sign of var, with sign(0) == 1."""
@@ -502,30 +536,36 @@ def sign(var):
     return (var >= 0) * 2 - 1
 math.sign = sign
 
+
 def sign0(var):
     """Return sign of var, with sign0(0) == 0."""
     return (var > 0) * 2 - 1 if var else var
 math.sign0 = sign0
 
-def limit(low, ival, high): 
+
+def limit(low, ival, high):
     """Limit input between low and high."""
     return max(min(ival, high), low)
 math.limit = limit
 
+
 def patheq(var1, var2):
     """Pathagorean's equation to find hyp of right triangle."""
-    return math.sqrt(var1*var1 + var2*var2)
+    return math.sqrt(var1 * var1 + var2 * var2)
 math.patheq = patheq
+
 
 def limit_unit(var):
     """Limit var between 0 and 1."""
     return max(min(var, 1.), 0.)
 math.limit_unit = limit_unit
 
+
 def norm360(deg):
     """."""
     return deg % 360.
 math.norm360 = norm360
+
 
 def norm180(deg):
     """."""
@@ -533,27 +573,30 @@ def norm180(deg):
     return ndeg if ndeg < 180. else ndeg - 360.
 math.norm180 = norm180
 
+
 def norm2pi(rad):
     """."""
     return rad % (2. * math.pi)
 math.norm2pi = norm2pi
 
+
 def normpi(rad):
     """."""
     nrad = norm360(rad)
-    return nrad if nrad < math.pi else nrad - 2.*math.pi
+    return nrad if nrad < math.pi else nrad - 2. * math.pi
 math.normpi = normpi
 
 ######################## Welcome ##############################################
 
+
 def _welcome():
     """Prints system info, etc."""
     print(
-"""\
+        """\
 _______________________________________________________________________________
 
-Python {0} 
-{6} {9} {10} {11} {1} {2} ({8})
+Python {0}, {10}
+{6} {9} {11}/{12} {1} {2} ({8})
 {7}
 {3}@{4} in {5}
 _______________________________________________________________________________
@@ -564,24 +607,27 @@ _______________________________________________________________________________
            HOST,                                                        # 4
            CWD,                                                         # 5
            OSNAME,                                                      # 6
-           time.strftime("%a, %d %b %y - %H:%M %Z - w%W, d%j",
-                         time.localtime()),                             # 7
+           time.strftime("%a %b %d %H:%M:%S %Z %Y -- w%W d%j",
+                         time.localtime()), # Like $date                # 7
            DISTRO,                                                      # 8
            PLAT,                                                        # 9
-           ARCH,                                                        # 10
-           PROC))                                                       # 11
+           ARCHP,                                                       # 10
+           PROC,                                                        # 11
+           MACH))                                                       # 12
 
 ######################## TEMP #################################################
- 
-def weightloss(days=81, date = (2014, 1, 14), start=229., end=185.):
-    for i in xrange(days+1):
+
+
+def weightloss(days=81, date=(2014, 1, 14), start=229., end=185.):
+    for i in xrange(days + 1):
         print(days - i,
-              datetime.date(*date) + datetime.timedelta(i, 0), 
-              round_near(start-i*((start-end)/days), .5))
+              datetime.date(*date) + datetime.timedelta(i, 0),
+              round_near(start - i * ((start - end) / days), .5))
+
 
 def work(start=730, stop=1630, lunch=100):
     """Time at work, enter in format '1945' => 7:45pm => 19.75."""
-    norm = lambda x: math.floor(x/100.) + (x%100)/60.
+    norm = lambda x: math.floor(x / 100.) + (x % 100) / 60.
     return (norm(stop) - norm(start) - norm(lunch))
 
 ######################## Execution ############################################
