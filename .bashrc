@@ -63,19 +63,19 @@ shopt -s histappend # append history among shell sessions
 export FALSE=0
 export TRUE=1
 
-#export BROWSER # See ~/.bash_profile
+#export BROWSER # See ~/.bashrc_custom
 #export EDITOR # See ~/.bashrc_custom
 export HISTCONTROL=ignoreboth # don't add cmds w/ '^ ' to history, also ignores dupes
 export HISTFILESIZE=3000
 export HISTSIZE=3000
 export HOSTS=/etc/hosts
-export LANG="C"
-export LANGUAGE="C"
-export LC_ALL="C" #en_US.UTF-8
-export LC_COLLATE="C"
+#export LANG # See ~/.bashrc_custom
+#export LANGUAGE # See ~/.bashrc_custom
+#export LC_ALL # See ~/.bashrc_custom
+#export LC_COLLATE # See ~/.bashrc_custom
 #export NAME # See ~/.bashrc_custom
 export NUL=/dev/null
-#export PATH # See ~/.bash_profile
+#export PATH # See ~/.bashrc_custom
 export PYTHONIOENCODING=utf_8
 #export PYTHONPATH # See ~/.bashrc_custom
 #export PYTHONSTARTUP # See ~/.bashrc_custom
@@ -83,7 +83,7 @@ export SERR=/dev/stderr
 export SIMPLEPS=$FALSE
 export SIN=/dev/stdin
 export SOUT=/dev/stdout
-#export TERM # See ~/.bash_profile
+#export TERM # See ~/.bashrc_custom
 
 # anaconda priority
 if [ -d ~/anaconda/bin ] ; then
@@ -540,7 +540,7 @@ function whats() {
   'la'
   'lsattr'
   'du -h'
-  'head -1'
+  'head -2'
   'wc'
   'sum'
   'md5sum'
@@ -616,7 +616,7 @@ function print() {
 
 ### startup actions ###
 case "$-" in
-  *i*) # only in interactive mode
+  *i*) # only in interactive mode (don't want to write to stdout non-interactively like scp)
     source ~/bin/setcolors &> $NUL
     pushd ~ &> $NUL
     ulimit unlimited

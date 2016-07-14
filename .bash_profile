@@ -35,24 +35,5 @@
 
 # Get the aliases and functions
 if [ -f ~/.bashrc ]; then
-  . ~/.bashrc
-fi
-
-# User specific environment and startup programs
-
-PATH=$HOME/bin:$PATH:$HOME/.local/bin
-export PATH
-
-if [ -x /usr/bin/firefox ] ; then
-  export BROWSER=/usr/bin/firefox
-elif [ -x /usr/lib64/firefox ] ; then
-  export BROWSER=/usr/lib64/firefox
-else
-  export BROWSER=$(which firefox)
-fi
-
-if [ -e /usr/share/terminfo/x/xterm-256color ]; then
-  export TERM='xterm-256color'
-else
-  export TERM='xterm-color'  # Need this on Fedora 21 otherwise clear prints escaped commands..?
+  . $HOME/.bashrc
 fi
