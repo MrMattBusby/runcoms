@@ -106,6 +106,7 @@ alias info='info --vi-keys'
 alias iostat='iostat -xhm' # more info
 alias ipq='ipython qtconsole &'
 alias ipy='ipython'
+alias ipy3='ipython3'
 alias less='less -R'  # decode colors
 alias ln='ln -i' # for safety
 alias ls='ls --color=auto' # better with colors
@@ -171,8 +172,8 @@ alias path='echo -e ${PATH//:/\\n}' # easily display path
 alias psme="/bin/ps -F | head -1 && /bin/ps -aF --user $USER | hl $USER"
 alias pts='echo "pts: you are $(tty)" | egrep /.\* && echo && ps | head -1 && ps auxfh | grep pts/[[:digit:]]'
 alias py='python -q 2> $NUL || python'
-alias py2='python2.7 -q'
-alias py3='python -q || /opt/python3/bin/python3 -q'
+alias py2='python2'
+alias py3='python3 -q || $(\which python3) -q'
 alias scr='screen -dRR' # attach to first or create new
 alias scrls='screen -ls'
 alias so='source'
@@ -204,7 +205,7 @@ function d() {
 function ff() {
   firefox "$@" &
 }
-function image() {
+function img() {
   gthumb "$@" &
 }
 function md_func() {
