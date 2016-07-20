@@ -100,6 +100,8 @@ alias cd='cd_func' # search subs
 alias ci='vim' # because typo
 alias cim='vim' # because typo
 alias cp='cp -i' # for safety
+alias df='df -kTh' # more readable
+alias du='du -h --max-depth 1' # display 1-level, summarize folders
 alias echo='echo -e' # interpret backslash
 alias free='free -tm' # totals
 alias info='info --vi-keys'
@@ -156,8 +158,6 @@ alias cd-="cd -"
 alias chx='chmod +x'
 alias cl-='cl -;'
 alias cpu='lscpu || cat /proc/cpuinfo'
-alias dff='df -kTh' # more readable
-alias duu='du -h --max-depth 1' # display 1-level, summarize folders
 alias hist='history | tail -15'
 alias hl='grep -E --color=auto -e ^ -e' # highlight + preserve other output
 alias la='ls -HAhlpq1' # list all files
