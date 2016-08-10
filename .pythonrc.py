@@ -111,7 +111,7 @@ SIN = sys.stdin                                  # File object
 SOUT = sys.stdout                                # File object
 CTIME = time.ctime()                             # String
 LTIME = time.localtime()                         # Time struct
-USER = pwd.getpwuid(os.getuid())[0]              # String
+USER = pwd.getpwuid(os.getuid())[0]              # String (getlogin can fail)
 VER = sys.version_info[0:3]                      # List (python)
 VERS = '.'.join(str(idx) for idx in VER)         # String (python)
 

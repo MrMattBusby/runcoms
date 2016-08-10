@@ -104,6 +104,8 @@ alias df='df -kTh' # more readable
 alias du='du -h --max-depth 1' # display 1-level, summarize folders
 alias echo='echo -e' # interpret backslash
 alias free='free -tm' # totals
+alias gc='git commit' # never used gc
+alias gs='git status' # never used ghostscript
 alias info='info --vi-keys'
 alias iostat='iostat -xhm' # more info
 alias ipq='ipython qtconsole &'
@@ -126,7 +128,7 @@ alias top='htop 2> $NUL || /usr/bin/top' # htop not always exist
 alias netdatalaunch='firefox localhost:19999 &' # /usr/sbin/netdata must be running (firehol/netdata)
 alias tree='tree -NFCAS' # cleaner
 alias units='man units | tail --lines +9 | head -46' # info. version-dependant
-alias vi='if [ -f /etc/vimrc ] ; then /usr/bin/vim -u /etc/vimrc; else /usr/bin/vim -u NONE; fi' # default VI for laypeople
+alias vi='vi_func' # default VI for laypeople
 
 ### typos ###
 alias cd..="cd .."
@@ -158,6 +160,7 @@ alias cd-="cd -"
 alias chx='chmod +x'
 alias cl-='cl -;'
 alias cpu='lscpu || cat /proc/cpuinfo'
+alias gd='git diff'
 alias hist='history | tail -15'
 alias hl='grep -E --color=auto -e ^ -e' # highlight + preserve other output
 alias la='ls -HAhlpq1' # list all files
@@ -232,7 +235,24 @@ function pep8() {
   elif [ $# -eq 2 ] ; then
     autopep8 --aggressive "$1" > "$2"
   else
-    echo -e "${CMDCOL}pep8: see \`autopep8 --help\`!${NC}"
+    autopep8 --aggressive --in-place *.py
+  fi
+}
+function vi_func() {
+  # call vim without any custom rc via `$vi`
+  if [ -x /usr/bin/vim ] ; then
+    local EXBL=/usr/bin/vim
+  elif [ -x /usr/share/vim ] ; then
+    local EXBL=/usr/share/vim
+  elif [ -x /usr/share/vim ] ; then
+    local EXBL=/usr/sbin/vim
+  else
+    local EXBL=vi
+  fi
+  if [ -f /etc/vimrc ] ; then
+    ${EXBL} -u /etc/vimrc "$@"
+  else
+    ${EXBL} -u NONE "$@"
   fi
 }
 
