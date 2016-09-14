@@ -163,9 +163,9 @@ alias cpu='lscpu || cat /proc/cpuinfo'
 alias gd='git diff'
 alias hist='history | tail -15'
 alias hl='grep -E --color=auto -e ^ -e' # highlight + preserve other output
-alias la='ls -HAhlpq1' # list all files
+alias la='ls -Ahlpq1' # list all files
 alias ld='ls -d .*/ */ 2>/dev/null' # list directories only, simple
-alias lt='ls -Hhlpq1t' # list all non .* files by time
+alias lt='ls -hlpq1t' # list all non .* files by time
 alias l.='ls -d .* 2>/dev/null' # list all .* files
 alias man2='man 2'
 alias man3='man 3'
