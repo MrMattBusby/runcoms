@@ -163,15 +163,16 @@ alias cpu='lscpu || cat /proc/cpuinfo'
 alias gd='git diff'
 alias hist='history | tail -15'
 alias hl='grep -E --color=auto -e ^ -e' # highlight + preserve other output
-alias la='ls -Ahlpq1' # list all files
-alias ld='ls -d .*/ */ 2>/dev/null' # list directories only, simple
-alias lt='ls -hlpq1t' # list all non .* files by time
-alias l.='ls -d .* 2>/dev/null' # list all .* files
+alias la='ls --color=auto -Ahlpq1' # list all files
+alias ld='ls --color=auto -d .*/ */ 2>/dev/null' # list directories only, simple
+alias lt='ls --color=auto -hlpq1t' # list all non .* files, by time
+alias l.='ls --color=auto -d .* 2>/dev/null' # list all .* files
 alias man2='man 2'
 alias man3='man 3'
 alias man4='man 4'
 alias mem='cat /proc/meminfo'
 alias path='echo -e ${PATH//:/\\n}' # easily display path
+alias psg='ps auxf|head -1;ps auxf|egrep --color=always -B3 -i' # ps-grep
 alias psme="/bin/ps -F | head -1 && /bin/ps -aF --user $USER | hl $USER"
 alias pts='echo "pts: you are $(tty)" | egrep /.\* && echo && ps | head -1 && ps auxfh | grep pts/[[:digit:]]'
 alias py='python -q 2> $NUL || python'
@@ -191,6 +192,9 @@ alias trees='tree -hpL 3' # files 2 deep
 alias v='vim'
 
 ### programs/filetypes ###
+function col() {
+  awk '{print $'"$1"'}' | xargs
+}
 function csv() {
   gnumeric "$@" &
 }
@@ -556,7 +560,7 @@ function whats() {
   'type -a'
   'which -a'
   'whatis'
-  'file -Eb'
+  'file -b'
   'stat'
   'la'
   'lsattr'
@@ -568,6 +572,7 @@ function whats() {
   'man -w'
   'info -w'
   )
+  # note: removed file -Eb b/c DNE in older file
   for each in "${COMMANDS[@]}" ; do
     COMMAND="$each"
     each+=' "$1" 2>/dev/null'
