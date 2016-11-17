@@ -33,11 +33,13 @@
 #   WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 #   POSSIBILITY OF SUCH DAMAGE.
 
-# PATH
+### exports ###
+
+## PATH
 PATH=$HOME/bin:$PATH:$HOME/.local/bin
 export PATH
 
-# BROWSER
+## BROWSER
 if [ -x /usr/bin/firefox ] ; then
   export BROWSER=/usr/bin/firefox
 elif [ -x /usr/lib64/firefox ] ; then
@@ -46,14 +48,14 @@ else
   export BROWSER=$(which firefox)
 fi
 
-# TERM
+## TERM
 if [ -e /usr/share/terminfo/x/xterm-256color ]; then
   export TERM='xterm-256color'
 else
   export TERM='xterm-color'  # Need this on Fedora 21 otherwise clear prints escaped commands..?
 fi
 
-# OTHER
+## OTHER
 export EDITOR='/usr/bin/vim -e'
 export LANG=en_US.UTF-8 #'C'
 export LANGUAGE=en_US.UTF-8 #'C'
@@ -63,3 +65,11 @@ export NAME=m_busby
 export PYTHONPATH=~/bin # ~/.local/lib/python2.7/site-packages
 export PYTHONSTARTUP=~/.pythonrc.py
 export VISUAL=/usr/bin/vim
+
+### !!! OVERWRITES !!! ###
+alias units='man units | tail --lines +9 | head -46' # info. version-dependant
+
+### edit startup/misc scripts ###
+alias vibh='vim ~/git/mrmattbusby/helpfiles/bash.markdown'
+alias vif='vim ~/bin/f'
+

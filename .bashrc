@@ -62,33 +62,21 @@ shopt -s histappend # append history among shell sessions
 ### exports ###
 export FALSE=0
 export TRUE=1
-
-#export BROWSER # See ~/.bashrc_custom
-#export EDITOR # See ~/.bashrc_custom
 export HISTCONTROL=ignoreboth # don't add cmds w/ '^ ' to history, also ignores dupes
-export HISTFILESIZE=3000
-export HISTSIZE=3000
+export HISTFILESIZE=5000
+export HISTSIZE=5000
 export HOSTS=/etc/hosts
-#export LANG # See ~/.bashrc_custom
-#export LANGUAGE # See ~/.bashrc_custom
-#export LC_ALL # See ~/.bashrc_custom
-#export LC_COLLATE # See ~/.bashrc_custom
-#export NAME # See ~/.bashrc_custom
 export NUL=/dev/null
-#export PATH # See ~/.bashrc_custom
 export PYTHONIOENCODING=utf_8
-#export PYTHONPATH # See ~/.bashrc_custom
-#export PYTHONSTARTUP # See ~/.bashrc_custom
 export SERR=/dev/stderr
 export SIMPLEPS=$FALSE
 export SIN=/dev/stdin
 export SOUT=/dev/stdout
-#export TERM # See ~/.bashrc_custom
 
-# anaconda priority
-if [ -d ~/anaconda/bin ] ; then
-  export PATH=~/anaconda/bin:$PATH
-fi
+# anaconda priority (preferably you'll activate virtual python env's)
+#if [ -d ~/anaconda/bin ] ; then
+#  export PATH=~/anaconda/bin:$PATH
+#fi
 
 ### !!! OVERWRITES !!! ###
 alias bpy='bpython-curses'
@@ -114,21 +102,16 @@ alias ipy3='ipython3'
 alias less='less -R'  # decode colors
 alias ln='ln -i' # for safety
 alias ls='ls --color=auto' # better with colors
-alias md='md_func' # read markdown
-alias mf='mv' # typo, haven't ever used mf
+alias lsblk='lsblk -o NAME,OWNER,GROUP,RM,RO,TYPE,SIZE,MODEL,MOUNTPOINT'
+alias mf='mv -i' # typo, haven't ever used mf
 alias mkdir='mkdir -pv' # create parents
 alias mv='mv -i' # for safety
-alias ping='ping -i.5 -c4 -W1' # send 4 packets, no need ^C
-alias ps='ps auxf' # verbose
+alias ping='ping -i.5 -c6 -W1' # send 6 packets, no need ^C
 alias rm='rm -i' # for safety
-alias screen='screen' # or 'byobu' (excellent wrapper but isn't common)
 alias ssh='ssh -Y' # FW X
 alias tar='tar_func' # for safety/prevent overwrite
 alias top='htop 2> $NUL || /usr/bin/top' # htop not always exist
-alias netdatalaunch='firefox localhost:19999 &' # /usr/sbin/netdata must be running (firehol/netdata)
 alias tree='tree -NFCAS' # cleaner
-alias units='man units | tail --lines +9 | head -46' # info. version-dependant
-alias vi='vi_func' # default VI for laypeople
 
 ### typos ###
 alias cd..="cd .."
@@ -160,7 +143,7 @@ alias cd-="cd -"
 alias chx='chmod +x'
 alias cl-='cl -;'
 alias cpu='lscpu || cat /proc/cpuinfo'
-alias gd='git diff'
+alias diffd='diff -r --brief' # diff directories
 alias hist='history | tail -15'
 alias hl='grep -E --color=auto -e ^ -e' # highlight + preserve other output
 alias la='ls --color=auto -Ahlpq1' # list all files
@@ -171,8 +154,12 @@ alias man2='man 2'
 alias man3='man 3'
 alias man4='man 4'
 alias mem='cat /proc/meminfo'
+alias netdatalaunch='firefox localhost:19999 &' # /usr/sbin/netdata must be running (firehol/netdata)
+alias ns='sudo netstat -pa --inet' # !!SUDO!!
 alias path='echo -e ${PATH//:/\\n}' # easily display path
-alias psg='ps auxf|head -1;ps auxf|egrep --color=always -B3 -i' # ps-grep
+alias ports='sudo netstat -tulanp' # open ports # !!SUDO!!
+alias psa='ps auxf' # verbose
+alias psg='ps auxf|head -1;ps auxf|egrep --color=always -B4 -i' # ps-grep
 alias psme="/bin/ps -F | head -1 && /bin/ps -aF --user $USER | hl $USER"
 alias pts='echo "pts: you are $(tty)" | egrep /.\* && echo && ps | head -1 && ps auxfh | grep pts/[[:digit:]]'
 alias py='python -q 2> $NUL || python'
@@ -182,8 +169,8 @@ alias scr='screen -dRR' # attach to first or create new
 alias scrls='screen -ls'
 alias so='source'
 alias tarc='tar -czvpf' # tar aliased to tar_func() for safety
-alias tart='tar -tzvpf' # tar aliased to tar_func() for safety
-alias tarx='tar -xzvpf' # tar aliased to tar_func() for safety
+alias tart='\tar -tzvpf'
+alias tarx='\tar -xzvpf'
 alias topcpu='ps | head -1 && /bin/ps auxfh | sort -nr -k 3 | head'
 alias topmem='ps | head -1 && /bin/ps auxfh | sort -nr -k 4 | head'
 alias topme='ps | head -1 && ps auxfh | egrep $USER | sort -nr -k 3 | head | grep $USER'
@@ -191,110 +178,34 @@ alias treed='tree -dL 4' # dir only 3 deep
 alias trees='tree -hpL 3' # files 2 deep
 alias v='vim'
 
-### programs/filetypes ###
-function col() {
-  awk '{print $'"$1"'}' | xargs
-}
-function csv() {
-  gnumeric "$@" &
-}
-function csv2() {
-  libreoffice --calc "$@" &
-}
-function d() {
-  if [ $# -lt 1 ] ; then
-    echo -e "${CMDCOL}usage:${NC} d arg1 arg2.."
-  else
-    echo -e "${CMDCOL}diffuse -w $@ &${NC}"
-    diffuse -w "$@" &
-  fi
-}
-function ff() {
-  firefox "$@" &
-}
-function img() {
-  gthumb "$@" &
-}
-function md_func() {
-  # view a markdown file via pandoc/firefox
-  if [ $# -ne 1 ] ; then
-    echo -e "${CMDCOL}md: Use one input parameter!${NC}"
-  else
-    if [ $(command -v pandoc) ] ; then
-      local BN=$(basename "$1")
-      echo -e "${CMDCOL}pandoc $1 -o "/tmp/${BN}.html" && firefox "/tmp/${BN}.html" &${NC}"
-      pandoc $1 -o "/tmp/${BN}.html" && firefox "/tmp/${BN}.html" &
-    else
-      echo -e "${CMDCOL}md: pandoc is required!${NC}"
-    fi
-  fi
-}
-function pdf() {
-  evince "$@" &
-}
-function pep8() {
-  if [ $# -eq 1 ] ; then
-    \cp -f "$1" ."$1".orig
-    autopep8 --aggressive --in-place "$1"
-  elif [ $# -eq 2 ] ; then
-    autopep8 --aggressive "$1" > "$2"
-  else
-    autopep8 --aggressive --in-place *.py
-  fi
-}
-function vi_func() {
-  # call vim without any custom rc via `$vi`
-  if [ -x /usr/bin/vim ] ; then
-    local EXBL=/usr/bin/vim
-  elif [ -x /usr/share/vim ] ; then
-    local EXBL=/usr/share/vim
-  elif [ -x /usr/share/vim ] ; then
-    local EXBL=/usr/sbin/vim
-  else
-    local EXBL=vi
-  fi
-  if [ -f /etc/vimrc ] ; then
-    ${EXBL} -u /etc/vimrc "$@"
-  else
-    ${EXBL} -u NONE "$@"
-  fi
-}
-
 ### devel ###
+#alias gc= # See OVERWRITES
+alias gd='git diff'
+#alias gs= # See OVERWRITES
 alias m='make'
 alias mcm='make clean && make'
-
-# svn diff x | less
 function sd() {
   if command -v colordiff &>/dev/null ; then svn diff "$@" | colordiff | less -R ; else svn diff "$@" | less ; fi
 }
-
-# svn log -v x | less # svn log -v x | less
 function sl() {
   svn log -v "$@" | less
 }
-
 alias st='svn st | /bin/grep -v ^?'
 alias svn_count='svn log -q | grep "|" | awk "{print \$3}" | sort | uniq -c | sort -nr'
 alias up='svn up'
 
-### edit startup scripts ###
+### edit startup/misc scripts ###
 alias vibu='vim ~/bin/backup'
 alias vib='vim ~/.bashrc'
-alias vif='vim ~/bin/f' # Eh I edit this enough
+alias vig='sudo vim /etc/group' # !!SUDO!!
+alias vih='sudo vim /etc/hosts' # !!SUDO!!
 alias vii='vim ~/.ipython/ipythonrc.py'
 alias vik='vim ~/.ssh/known_hosts'
 alias vip='vim ~/.pythonrc.py'
 alias vipu='vim ~/bin/pyutils.py'
 alias vis='vim ~/.screenrc'
+alias visudo='sudo vim /etc/sudoers' # !!SUDO!!
 alias viv='vim ~/.vimrc'
-
-### sudo ###
-alias ns='sudo netstat -pa --inet'
-alias ports='sudo netstat -tulanp' # open ports
-alias vig='sudo vim /etc/group'
-alias vih='sudo vim /etc/hosts'
-alias visudo='sudo vim /etc/sudoers'
 
 ### function definitions ###
 
@@ -326,128 +237,47 @@ function cl() {
   cd $* 1>/dev/null && ls -pq
 }
 
-# display on startup info about user/pc/etc
-function me() {
-  local TTYINFO=$(tty|sed 's|/dev/||')
-  local WHOINFO=$(who|grep $USER|grep pts|wc -l)
-  local HOSTINFO1=$(uptime|grep -o "up.*users" | sed 's|  | |g')
-  local HOSTINFO2=$(who -q|head -1|sed 's| |\n|g'|sort -u|xargs)
-  local PC_INFO=$(cat /proc/cpuinfo | grep -i "model name" | head -1 | sed 's/.*: //' | xargs)
-  local PC_NUM=$(cat /proc/cpuinfo | grep -i "processor" | wc -l)
-  local PC_STAT_C="$(($(mpstat | grep %idle | sed 's/%idle.*//' | wc -c)-1))"
-  local AVG=($(cat /proc/loadavg))
-  local LOAD_RAW=($(mpstat | grep %idle -A1 | tail -1 | sed "s/.\{${PC_STAT_C}\}//" | xargs))
-  local LOAD=$(echo ${LOAD_RAW[0]} | awk '{print 100-$1}')
-  local MEM=($(\free -tm | grep Mem | awk '{print $2,$3}'))
-  local CACHE=$(\free -tm | grep "\-/+" | awk '{print $3}')
-  local SWP=($(\free -tm | grep Swap | awk '{print $2,$3}'))
-  local IP=$(/sbin/ifconfig|egrep -o "(inet addr:|inet )[0-9\.]*" | sed "s/inet addr://" | sed "s/inet //" | xargs | sed 's/ /, /g')
-  local OS=$(cat /etc/redhat-release 2>/dev/null || cat /etc/issue 2>/dev/null | head -1 | sed 's/^\s*//' | sed 's/\s*$//')
-  local UNAME="$(uname -o) $(uname -r)"
-  local VGREP=$(grep --version|head -1|\egrep -o "[0-9]+(\.[0-9]+)+")
-  local VGNU=$(gnuplot --version|sed 's| patch.*||' | tr ' ' ':')
-  local VGCC=$(gcc --version|head -1|egrep -o '\(GCC\) .\..\..'|sed 's|(GCC) ||')
-  local VVIM=$(vim --version|head -1|egrep -o '.\..')
-  local VSVN=$(svn --version 2>/dev/null|head -1|sed 's|, version||'|sed 's| (.*||' | tr ' ' ':')
-  local VPY=$(echo $(/bin/env python -V 2>&1)|egrep -o "[pP]ython [0-9\.]*" | tr ' ' ':')
-  local DATE=$(date | xargs)
-
-  echo -e "${BWHITE}User  ${BBLACK}: ${WHITE}$USER:$EUID ($HOME)"
-  echo -e "${BWHITE}Shell ${BBLACK}: ${WHITE}$SHELL $BASHPID ($TERM: $TTYINFO of $WHOINFO)"
-  echo -e "${BWHITE}Host  ${BBLACK}: ${WHITE}${HOSTNAME} ${DISPLAY} ($HOSTINFO1: $HOSTINFO2)"
-  echo -e "${BWHITE}PC    ${BBLACK}: ${WHITE}$PC_INFO x$PC_NUM"
-  echo -e "${BWHITE}Loads ${BBLACK}: ${WHITE}${LOAD}% ${AVG[@]::4} Mem:${MEM[1]}(${CACHE})/${MEM[0]}Mb Swap:${SWP[1]}/${SWP[0]}Mb"
-  echo -e "${BWHITE}IPs   ${BBLACK}: ${WHITE}${IP}"
-  echo -e "${BWHITE}OS    ${BBLACK}: ${WHITE}${OS}: $UNAME"
-  echo -e "${BWHITE}Vers  ${BBLACK}: ${WHITE}grep:$VGREP $VGNU gcc:$VGCC VIM:$VVIM $VPY"
-  echo -e "${BWHITE}Date  ${BBLACK}: ${WHITE}${DATE}${NC}"
-}
-
-# define a word
-function def() {
-  curl dict://dict.org/d:"$(echo $@|xargs)":*
-}
-
-# select line, use via pipe (count from 0)
-function line() {
-  if [ $# -ne 1 ] ; then
-    echo -e "${CMDCOL}line: Use only one numeric input parameter!${NC}"
+# (l)ist (c)ontents of file/dir/misc types and total size in the current
+function lc() {
+  if [ $# -eq 0 ] ; then
+    pushd . 1> /dev/null
   else
-    head -$(($1+1)) | tail -1
+    pushd $@ 1> /dev/null
   fi
+  DIR=$(pwd -P $@)
+  echo -e "${CMDCOL}>>> Listing contents of \"$DIR\" (ignoring items with permissions):${NC}"
+  echo
+  echo -e "${CMDCOL}All   :${NC} $(find . -maxdepth 1 -regex '\.\/.*' 2>/dev/null|wc -l) ($(find . -maxdepth 1 \
+    -regex '\.\/\..*' 2>/dev/null|wc -l) hidden)"
+  echo -e "${CMDCOL}Dirs  :${NC} $(find . -maxdepth 1 -type d -regex '\.\/.*' 2>/dev/null|wc -l) ($(find . -maxdepth 1 \
+    -type d -regex '\.\/\..*' 2>/dev/null|wc -l) hidden)"
+  echo -e "${CMDCOL}Files :${NC} $(find . -maxdepth 1 -type f -regex '\.\/.*' 2>/dev/null|wc -l) ($(find . -maxdepth 1 \
+    -type f -regex '\.\/\..*' 2>/dev/null|wc -l) hidden, \
+  $(ls -1 *.{tgz,tar,a,ar,rpm,iso,bz,bz2,lz,gz,gzip,tar.gzip,rz,7z,s7z,cab,rar,tar.bz2,tar.gz,zz,zip} 2>/dev/null|\
+  sort -u|wc -l) archived)"
+  echo -e "${CMDCOL}Links :${NC} $(find . -maxdepth 1 -type l -regex '\.\/.*' 2>/dev/null|wc -l) ($(find . -maxdepth 1 \
+    -type l -regex '\.\/\..*' 2>/dev/null|wc -l) hidden)"
+  echo -e "${CMDCOL}Size  :${NC} $(ls -Agh1 2>/dev/null|head -1|sed 's|total ||') ($(du -h 2>/dev/null|tail -1|\
+    sed 's|\s*\.\s*$||') including sub-directories)"
+  echo
+  ls --color=auto -Apq
+  popd 1> /dev/null
 }
 
-# try to match a word for defining
-function match() {
-  curl dict://dict.org/m:"$(echo $@|xargs)"::re
-}
-
-# make directory and goto
+# Make a directory and navigate to it
 function mkgo() {
   if [ $# -eq 1 ] ; then
     echo -e "${CMDCOL}mkdir -pv $1 && cd $1${NC}"
-    mkdir -pv $1 && cd $1
+    mkdir -pv $1 && pushd $1
   else
     echo -e "${CMDCOL}mkgo: Use only 1 argument!${NC}"
   fi
 }
 
-# ipython notebook
-function notebook() {
-  pushd ~/notebooks
-  ipython notebook
-}
-
-# pause or sleep
-function pause() {
-  if [ $# -eq 0 ] ; then
-    sleep 999999
-  else
-    sleep $1
-  fi
-}
-
-# pc-to-server file transfer: $ pc_s @apt2 file_from file_to
-function pc_s() {
-  if [ $# -eq 3 ] ; then
-    echo -e "${CMDCOL}scp $2 ${NAME}$1:$3${NC}"
-    scp $2 ${NAME}$1:$3
-  else
-    echo -e "${CMDCOL}pc_s: Use 3 arguments: pc_s @server filename destfolder${NC}"
-  fi
-}
-
 # ps1 function called from PROMPT_COMMAND, changes based on several vars
 function create_ps() {
-  # last command (this has to be at the top)
-  local LAST_CMD=$?
-
-  # escape color codes for prompt (otherwise you'll have PS printing errors, runon lines etc)
-  local BLACK="\[$BLACK\]"
-  local RED="\[$RED\]"
-  local GREEN="\[$GREEN\]"
-  local YELLOW="\[$YELLOW\]"
-  local BLUE="\[$BLUE\]"
-  local PURPLE="\[$PURPLE\]"
-  local CYAN="\[$CYAN\]"
-  local WHITE="\[$WHITE\]"
-  local BBLACK="\[$BBLACK\]"
-  local BRED="\[$BRED\]"
-  local BGREEN="\[$BGREEN\]"
-  local BYELLOW="\[$BYELLOW\]"
-  local BBLUE="\[$BBLUE\]"
-  local BPURPLE="\[$BPURPLE\]"
-  local BCYAN="\[$BCYAN\]"
-  local BWHITE="\[$BWHITE\]"
-  local HBLACK="\[$HBLACK\]"
-  local HRED="\[$HRED\]"
-  local HGREEN="\[$HGREEN\]"
-  local HYELLOW="\[$HYELLOW\]"
-  local HBLUE="\[$HBLUE\]"
-  local HPURPLE="\[$HPURPLE\]"
-  local HCYAN="\[$HCYAN\]"
-  local HWHITE="\[$HWHITE\]"
-  local NC="\[$NC\]"
+  # last command
+  local LAST_CMD="$@"
 
   # history
   local PS1_HIST="${BBLACK}[${BWHITE}\!${BBLACK}]"
@@ -514,22 +344,6 @@ ${PS1_PWD}${PS1_RTN}${PS1_SYB}${NC} " # _PS1_
   export PS2="${PS1_RTN_COL2}...${NC} " # continuation
   export PS3="${PS1_RTN_COL2}?${NC} " # select case
   export PS4="${PS1_RTN_COL2}+${NC} " # set prefix tracing
-}
-
-# remote login (ssh), remember tab-complete after '@': $ rl @somehost
-function rl() {
-  echo -e "${CMDCOL}ssh -Y ${NAME}$1${NC}"
-  ssh -Y ${NAME}$1
-}
-
-# server-to-pc file transfer: $ s_pc @apt2 file_from file_to
-function s_pc() {
-  if [ $# -eq 3 ] ; then
-    echo -e "${CMDCOL}scp ${NAME}$1:$2 $3${NC}"
-    scp ${NAME}$1:$2 $3
-  else
-    echo -e "${CMDCOL}s_pc: Use 3 arguments: s_pc @server filelocation localdest${NC}"
-  fi
 }
 
 # make F^@#1%& tar safer because it's so stupid
@@ -627,19 +441,6 @@ function whats() {
   fi
 }
 
-# wiki a word or phrase in quotes
-function wiki() {
-  echo $(dig +short txt "$(echo $@)".wp.dg.cx)
-}
-
-function error() {
-  >&2 echo -en ">> $FILENAME: ERROR: $@!\n"
-}
-
-function print() {
-  echo -en ">> $FILENAME: $@.\n"
-}
-
 ### startup actions ###
 case "$-" in
   *i*) # only in interactive mode (don't want to write to stdout non-interactively like scp)
@@ -647,12 +448,14 @@ case "$-" in
     pushd ~ &> $NUL
     ulimit unlimited
     ulimit -c unlimited
-    me # print welcome
+    #command -v me >/dev/null 2>&1 && me
+    me 2> /dev/null
     ;;
   *)
     ;;
 esac
 
+# Term overrides
 case $TERM in
   xterm|xterm-256color|xterm-color|gnome-terminal|screen|Eterm)
     # xterm escape seq "ESC]0;...BELL" sets icon name and title
@@ -661,18 +464,19 @@ case $TERM in
     elif [ -n "$local256" ] || [ -n "$SEND_256_COLORS_TO_REMOTE" ]; then
       export TERM=xterm-256color
     fi
-    export PROMPT_COMMAND='\
-create_ps;\
-echo -ne "\033]0;${USER} @ ${HOSTNAME}\007";'
     ;;
   cygwin)
     # start xming
     cygstart.exe /cygdrive/c/Program\ Files\ \(x86\)/Xming/Xming.exe :0 -clipboard -multiwindow
     export DISPLAY=localhost:0
-    export PROMPT_COMMAND='\
-create_ps;\
-echo -ne "\033]0;${USER} @ ${HOSTNAME}\007";'
     ;;
   *)
     ;;
 esac
+
+# Set PS and Terminal text
+export PROMPT_COMMAND='\
+export PREV_STATUS="$?";\
+export PREV_COMMAND="$(history|tail -1|sed s/.......//|sed s/\\\\//g)";\
+create_ps "$PREV_STATUS";\
+echo -ne "\033]0;[$(tty|egrep -o [[:digit:]])] ${USER}@${HOSTNAME%%.*}> ${PREV_COMMAND}\007";'
