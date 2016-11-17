@@ -274,6 +274,12 @@ function mkgo() {
   fi
 }
 
+# Launch IPython notebook
+function notebook() {
+  pushd ~/notebooks
+  ipython notebook
+}
+
 # ps1 function called from PROMPT_COMMAND, changes based on several vars
 function create_ps() {
   # last command
@@ -369,6 +375,7 @@ function whats() {
   local COMMAND=
   local WCL=
   local COMMANDS=(
+  'command -v'
   'readlink -e'
   'alias'
   'type -a'
@@ -400,7 +407,7 @@ function whats() {
       if [ "$WCL" -le 30 ] ; then
         echo "$OUTPUT"
       else
-        echo "$OUTPUT" | head -30
+        echo "$OUTPUT" | head -20
         echo "..."
       fi
     fi
@@ -416,7 +423,7 @@ function whats() {
       if [ "$WCL" -le 30 ] ; then
         echo "$OUTPUT"
       else
-        echo "$OUTPUT" | head -30
+        echo "$OUTPUT" | head -20
         echo "..."
       fi
     fi
@@ -430,7 +437,7 @@ function whats() {
       if [ "$WCL" -le 30 ] ; then
         echo "$OUTPUT"
       else
-        echo "$OUTPUT" | head -30
+        echo "$OUTPUT" | head -20
         echo "..."
       fi
     fi
@@ -442,18 +449,6 @@ function whats() {
 }
 
 ### startup actions ###
-case "$-" in
-  *i*) # only in interactive mode (don't want to write to stdout non-interactively like scp)
-    source ~/bin/setcolors &> $NUL
-    pushd ~ &> $NUL
-    ulimit unlimited
-    ulimit -c unlimited
-    #command -v me >/dev/null 2>&1 && me
-    me 2> /dev/null
-    ;;
-  *)
-    ;;
-esac
 
 # Term overrides
 case $TERM in
@@ -480,3 +475,17 @@ export PREV_STATUS="$?";\
 export PREV_COMMAND="$(history|tail -1|sed s/.......//|sed s/\\\\//g)";\
 create_ps "$PREV_STATUS";\
 echo -ne "\033]0;[$(tty|egrep -o [[:digit:]])] ${USER}@${HOSTNAME%%.*}> ${PREV_COMMAND}\007";'
+
+case "$-" in
+  *i*) # only in interactive mode (don't want to write to stdout non-interactively like scp)
+    source ~/bin/setcolors &> $NUL
+    pushd ~ &> $NUL
+    ulimit unlimited
+    ulimit -c unlimited
+    #command -v me >/dev/null 2>&1 && me
+    me 2> /dev/null
+    ;;
+  *)
+    ;;
+esac
+
