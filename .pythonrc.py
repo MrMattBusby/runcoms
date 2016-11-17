@@ -72,17 +72,23 @@ from datetime import datetime
 try:
     import pandas as pd  # Load time is lengthy!
 except ImportError:
-    #print(".pythonrc: no pandas module found, skipping...")
+    # print(".pythonrc.py: no pandas module found, skipping...")
     pass
 try:
     import numpy as np
 except ImportError:
-    # print(".pythonrc: no numpy module found, skipping...")
+    # print(".pythonrc.py: no numpy module found, skipping...")
     pass
 # try:
 #     import matplotlib.pyplot as plt
 # except ImportError:
-#     print(".pythonrc: no matplotlib module found, skipping...")
+#     print(".pythonrc.py: no matplotlib module found, skipping...")
+try:
+    import consts
+    from consts import *
+except ImportError:
+    # print(".pythonrc.py: no consts module found, skipping...")
+    pass
 
 # Bind TAB to autocomplete in interactive mode (or use ipython)
 import readline
@@ -116,41 +122,44 @@ VER = sys.version_info[0:3]                      # List (python)
 VERS = '.'.join(str(idx) for idx in VER)         # String (python)
 
 # Import constants and pyutils
-import imp
-try:
-    imp.load_source('pyutils', HOME + '/scripts/pyutils.py')
-    try:
-        from pyutils import *
-        ENV = Env()
-    except:
-        # print(".pythonrc: no pyutils module found, skipping...")
-        pass
-except IOError:
-    # print(".pythonrc: no pyutils.py found, skipping...")
-    pass
-try:
-    imp.load_source('consts', HOME + '/scripts/consts.py')
-    try:
-        import consts as C
-    except:
-        # print(".pythonrc: no consts module found, skipping...")
-        pass
-except IOError:
-    # print(".pythonrc: no consts.py found, skipping...")
-    pass
-del imp
+# import imp
+# try:
+#     imp.load_source('pyutils', HOME + '/scripts/pyutils.py')
+#     try:
+#         from pyutils import *
+#         ENV = Env()
+#     except:
+#         # print(".pythonrc: no pyutils module found, skipping...")
+#         pass
+# except IOError:
+#     # print(".pythonrc: no pyutils.py found, skipping...")
+#     pass
+# try:
+#     imp.load_source('consts', HOME + '/scripts/consts.py')
+#     try:
+#         import consts as C
+#     except:
+#         # print(".pythonrc: no consts module found, skipping...")
+#         pass
+# except IOError:
+#     # print(".pythonrc: no consts.py found, skipping...")
+#     pass
+# del imp
 
 # Add to path
-DIR = HOME + '/scripts'
-if os.path.exists(DIR) and DIR not in sys.path:
-    sys.path.append(DIR)
-DIR = HOME + '/bin'
-if os.path.exists(DIR) and DIR not in sys.path:
-    sys.path.append(DIR)
-DIR = HOME + '/git'
-if os.path.exists(DIR) and DIR not in sys.path:
-    sys.path.append(DIR)
-del DIR
+# DIR = HOME + '/scripts'
+# if os.path.exists(DIR) and DIR not in sys.path:
+#     sys.path.append(DIR)
+# DIR = HOME + '/bin'
+# if os.path.exists(DIR) and DIR not in sys.path:
+#     sys.path.append(DIR)
+# DIR = HOME + '/git'
+# if os.path.exists(DIR) and DIR not in sys.path:
+#     sys.path.append(DIR)
+# DIR = HOME + '/lib'
+# if os.path.exists(DIR) and DIR not in sys.path:
+#     sys.path.append(DIR)
+# del DIR
 
 ######################## Dummy Data ###########################################
 
