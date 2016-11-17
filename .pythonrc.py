@@ -97,9 +97,9 @@ readline.parse_and_bind("tab: complete")
 
 # Initial environment variables, static
 ARCHP2 = platform.architecture()[0]              # String (not reliable in OSX)
-ARCHP = ("32bit", "64bit")[(struct.calcsize("P") == 8)] # String (for python)
+ARCHP = ("32bit", "64bit")[(struct.calcsize("P") == 8)]  # String (for python)
 CWD = os.getcwd()                                # String
-DISTRO = ' '.join(platform.linux_distribution()) # String
+DISTRO = ' '.join(platform.linux_distribution())  # String
 LS = os.listdir('.')                             # List
 HOME = os.path.expanduser('~')                   # String
 HOST = platform.node()                           # String
@@ -120,46 +120,6 @@ LTIME = time.localtime()                         # Time struct
 USER = pwd.getpwuid(os.getuid())[0]              # String (getlogin can fail)
 VER = sys.version_info[0:3]                      # List (python)
 VERS = '.'.join(str(idx) for idx in VER)         # String (python)
-
-# Import constants and pyutils
-# import imp
-# try:
-#     imp.load_source('pyutils', HOME + '/scripts/pyutils.py')
-#     try:
-#         from pyutils import *
-#         ENV = Env()
-#     except:
-#         # print(".pythonrc: no pyutils module found, skipping...")
-#         pass
-# except IOError:
-#     # print(".pythonrc: no pyutils.py found, skipping...")
-#     pass
-# try:
-#     imp.load_source('consts', HOME + '/scripts/consts.py')
-#     try:
-#         import consts as C
-#     except:
-#         # print(".pythonrc: no consts module found, skipping...")
-#         pass
-# except IOError:
-#     # print(".pythonrc: no consts.py found, skipping...")
-#     pass
-# del imp
-
-# Add to path
-# DIR = HOME + '/scripts'
-# if os.path.exists(DIR) and DIR not in sys.path:
-#     sys.path.append(DIR)
-# DIR = HOME + '/bin'
-# if os.path.exists(DIR) and DIR not in sys.path:
-#     sys.path.append(DIR)
-# DIR = HOME + '/git'
-# if os.path.exists(DIR) and DIR not in sys.path:
-#     sys.path.append(DIR)
-# DIR = HOME + '/lib'
-# if os.path.exists(DIR) and DIR not in sys.path:
-#     sys.path.append(DIR)
-# del DIR
 
 ######################## Dummy Data ###########################################
 
@@ -617,7 +577,7 @@ _______________________________________________________________________________
            CWD,                                                         # 5
            OSNAME,                                                      # 6
            time.strftime("%a %b %d %H:%M:%S %Z %Y -- w%W d%j",
-                         time.localtime()), # Like $date                # 7
+                         time.localtime()),  # Like $date                # 7
            DISTRO,                                                      # 8
            PLAT,                                                        # 9
            ARCHP,                                                       # 10
@@ -625,13 +585,6 @@ _______________________________________________________________________________
            MACH))                                                       # 12
 
 ######################## TEMP #################################################
-
-
-def weightloss(days=81, date=(2014, 1, 14), start=229., end=185.):
-    for i in xrange(days + 1):
-        print(days - i,
-              datetime.date(*date) + datetime.timedelta(i, 0),
-              round_near(start - i * ((start - end) / days), .5))
 
 
 def work(start=730, stop=1630, lunch=100):
