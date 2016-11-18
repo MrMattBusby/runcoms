@@ -33,6 +33,11 @@
 #   WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 #   POSSIBILITY OF SUCH DAMAGE.
 
+# anaconda priority (preferably you'll activate virtual python env's)
+#if [ -d ~/anaconda/bin ] ; then
+#  export PATH=~/anaconda/bin:$PATH
+#fi
+
 ### exports ###
 
 ## PATH
@@ -67,9 +72,19 @@ export PYTHONSTARTUP=~/.pythonrc.py
 export VISUAL=/usr/bin/vim
 
 ### !!! OVERWRITES !!! ###
+alias bpy='bpython-curses'
+alias cal='cal -3s'
 alias units='man units | tail --lines +9 | head -46' # info. version-dependant
+
+### shortcuts/convenience ###
+alias beautify='astyle -n -A2yCSUs3NLwYm0M40fpHk3W3j -xe'
+alias netdatalaunch='firefox localhost:19999 &' # /usr/sbin/netdata must be running (firehol/netdata)
+alias scr='screen -dRR' # attach to first or create new
+alias scrls='screen -ls'
 
 ### edit startup/misc scripts ###
 alias vibh='vim ~/git/mrmattbusby/helpfiles/bash.markdown'
+alias vibu='vim ~/bin/backup'
+alias vis='vim ~/.screenrc'
 alias vif='vim ~/bin/f'
 

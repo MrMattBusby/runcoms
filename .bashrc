@@ -47,7 +47,10 @@ if [ -f ~/.bashrc_custom ]; then
   . ~/.bashrc_custom
 fi
 
-### shell settings / vim mode ###
+######################
+### shell settings ###
+######################
+
 set history
 #set keymap vi  # vi style usage (can't Alt-. though)
 #set -o vi
@@ -73,47 +76,53 @@ export SIMPLEPS=$FALSE
 export SIN=/dev/stdin
 export SOUT=/dev/stdout
 
-# anaconda priority (preferably you'll activate virtual python env's)
-#if [ -d ~/anaconda/bin ] ; then
-#  export PATH=~/anaconda/bin:$PATH
-#fi
-
+##########################
 ### !!! OVERWRITES !!! ###
-alias bpy='bpython-curses'
-alias cal='cal -3s'
+##########################
+
+### modify defaults ###
 alias chgrp='chgrp --preserve-root' # perms
-alias chmod='chmod --preserve-root'  # perms
-alias chown='chown --preserve-root'  # perms
+alias chmod='chmod --preserve-root' # perms
+alias chown='chown --preserve-root' # perms
+alias echo='echo -e' # interpret backslash
+alias egrep='egrep --color=auto'
+alias grep='grep --color=auto'
+alias info='info --vi-keys'
+alias less='less -R'  # decode colors
+alias ls='ls --color=auto' # better with colors
+alias mkdir='mkdir -pv' # create parents
+alias ssh='ssh -Y' # FW X
+
+### for safety ###
+alias cp='cp -i'
+alias ln='ln -i'
+alias mf='mv -i' # typo, haven't ever used mf
+alias mv='mv -i'
+alias rm='rm -i'
+alias tar='tar_func'
+
+### customize (revert using `$\<command>`) ###
 alias cd='cd_func' # search subs
-alias ci='vim' # because typo
+alias ci='vi' # because typo
 alias cim='vim' # because typo
-alias cp='cp -i' # for safety
 alias df='df -kTh' # more readable
 alias du='du -h --max-depth 1' # display 1-level, summarize folders
-alias echo='echo -e' # interpret backslash
 alias free='free -tm' # totals
 alias gc='git commit' # never used gc
 alias gs='git status' # never used ghostscript
-alias info='info --vi-keys'
 alias iostat='iostat -xhm' # more info
 alias ipq='ipython qtconsole &'
 alias ipy='ipython'
 alias ipy3='ipython3'
-alias less='less -R'  # decode colors
-alias ln='ln -i' # for safety
-alias ls='ls --color=auto' # better with colors
 alias lsblk='lsblk -o NAME,OWNER,GROUP,RM,RO,TYPE,SIZE,MODEL,MOUNTPOINT'
-alias mf='mv -i' # typo, haven't ever used mf
-alias mkdir='mkdir -pv' # create parents
-alias mv='mv -i' # for safety
 alias ping='ping -i.5 -c6 -W1' # send 6 packets, no need ^C
-alias rm='rm -i' # for safety
-alias ssh='ssh -Y' # FW X
-alias tar='tar_func' # for safety/prevent overwrite
 alias top='htop 2> $NUL || /usr/bin/top' # htop not always exist
 alias tree='tree -NFCAS' # cleaner
 
+#############
 ### typos ###
+#############
+
 alias cd..="cd .."
 alias cd...="cd ../.."
 alias cls='clear'
@@ -127,7 +136,10 @@ alias Less='less'
 alias LEss='less'
 alias mc='mv'
 
-### shortcuts ###
+#############################
+### shortcuts/convenience ###
+#############################
+
 alias .-="cd - &> /dev/null"
 alias ..="cd .."
 alias ...="cd ../.."
@@ -138,7 +150,6 @@ alias ..2="cd ../.."
 alias ..3="cd ../../.."
 alias ..4="cd ../../../.."
 alias ..5="cd ../../../../.."
-alias beautify='astyle -n -A2yCSUs3NLwYm0M40fpHk3W3j -xe'
 alias cd-="cd -"
 alias chx='chmod +x'
 alias cl-='cl -;'
@@ -154,7 +165,6 @@ alias man2='man 2'
 alias man3='man 3'
 alias man4='man 4'
 alias mem='cat /proc/meminfo'
-alias netdatalaunch='firefox localhost:19999 &' # /usr/sbin/netdata must be running (firehol/netdata)
 alias ns='sudo netstat -pa --inet' # !!SUDO!!
 alias path='echo -e ${PATH//:/\\n}' # easily display path
 alias ports='sudo netstat -tulanp' # open ports # !!SUDO!!
@@ -164,10 +174,7 @@ alias psme="/bin/ps -F | head -1 && /bin/ps -aF --user $USER | hl $USER"
 alias pts='echo "pts: you are $(tty)" | egrep /.\* && echo && ps | head -1 && ps auxfh | grep pts/[[:digit:]]'
 alias py='python -q 2> $NUL || python'
 alias py2='python2'
-alias py3='python3 -q || $(\which python3) -q'
-alias scr='screen -dRR' # attach to first or create new
-alias scrls='screen -ls'
-alias so='source'
+alias py3='python3 -q || $(\which python3|head -1) -q'
 alias tarc='tar -czvpf' # tar aliased to tar_func() for safety
 alias tart='\tar -tzvpf'
 alias tarx='\tar -xzvpf'
@@ -178,12 +185,20 @@ alias treed='tree -dL 4' # dir only 3 deep
 alias trees='tree -hpL 3' # files 2 deep
 alias v='vim'
 
+#############
 ### devel ###
-#alias gc= # See OVERWRITES
+#############
+
+### git ###
 alias gd='git diff'
+#alias gc= # See OVERWRITES
 #alias gs= # See OVERWRITES
+
+### make ###
 alias m='make'
 alias mcm='make clean && make'
+
+### svn ###
 function sd() {
   if command -v colordiff &>/dev/null ; then svn diff "$@" | colordiff | less -R ; else svn diff "$@" | less ; fi
 }
@@ -194,22 +209,24 @@ alias st='svn st | /bin/grep -v ^?'
 alias svn_count='svn log -q | grep "|" | awk "{print \$3}" | sort | uniq -c | sort -nr'
 alias up='svn up'
 
+#################################
 ### edit startup/misc scripts ###
-alias vibu='vim ~/bin/backup'
+#################################
+
 alias vib='vim ~/.bashrc'
 alias vig='sudo vim /etc/group' # !!SUDO!!
 alias vih='sudo vim /etc/hosts' # !!SUDO!!
 alias vii='vim ~/.ipython/ipythonrc.py'
 alias vik='vim ~/.ssh/known_hosts'
 alias vip='vim ~/.pythonrc.py'
-alias vipu='vim ~/bin/pyutils.py'
-alias vis='vim ~/.screenrc'
 alias visudo='sudo vim /etc/sudoers' # !!SUDO!!
 alias viv='vim ~/.vimrc'
 
+############################
 ### function definitions ###
+############################
 
-# cd to first subdir matching $1 if not found, can't run in subprocess
+# cd to first subdir matching $1 if not found (can't run in subprocess)
 function cd_func() {
   if [ $# -ge 1 ] ; then
     \cd "$1" 2> /dev/null ||
@@ -232,7 +249,7 @@ function cd_func() {
   fi
 }
 
-# change location then ls, can't run in subprocess
+# change location then ls (can't run in subprocess)
 function cl() {
   cd $* 1>/dev/null && ls -pq
 }
@@ -402,7 +419,7 @@ function whats() {
   'man -w'
   'info -w'
   )
-  # note: removed file -Eb b/c DNE in older file
+  # note: removed file -Eb b/c DNE in old distros
   for each in "${COMMANDS[@]}" ; do
     COMMAND="$each"
     each+=' "$1" 2>/dev/null'
@@ -457,7 +474,9 @@ function whats() {
   fi
 }
 
+#######################
 ### startup actions ###
+#######################
 
 # Term overrides
 case $TERM in
