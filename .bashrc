@@ -280,6 +280,15 @@ function notebook() {
   ipython notebook
 }
 
+# Name the terminal
+function termname() {
+  export PROMPT_COMMAND='\
+export PREV_STATUS="$?";\
+export PREV_COMMAND="$(history|tail -1|sed s/.......//|sed s/\\\\//g)";\
+create_ps "$PREV_STATUS";\
+echo -ne "\033]0;'"$@"'\007";'
+}
+
 # ps1 function called from PROMPT_COMMAND, changes based on several vars
 function create_ps() {
   # last command
