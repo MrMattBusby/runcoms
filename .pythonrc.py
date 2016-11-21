@@ -2,14 +2,13 @@
 # -*- coding: utf-8 -*-
 """Python run command. Please see metadata (via pydoc) for further info.
 
-COPYRIGHT:
-- See __copyright__ below.
+LICENSE
 
-LICENSE:
-- See __license__ below.
+See below __license__
 
-USAGE:
-    $ [i]py[thon[3]] [-E  # To ignore this startup file] [-...]
+USAGE
+
+`[i]py[thon[3]] [-E  # To ignore this startup file] [-...]`
 
 """
 from __future__ import print_function, with_statement, division
@@ -19,11 +18,19 @@ from __future__ import print_function, with_statement, division
 # Metadata, used in $ pydoc ./%
 __creator__ = "Matt Busby"
 __email__ = "@MrMattBusby"
-__author__ = "{0} {1}".format(__creator__, __email__)
 __date__ = "2010-2016"
-__copyright__ = "Copyright (c) {year}, {owner}. All rights reserved.".format(
-    year=__date__, owner=__creator__)
-__license__   = """\
+
+__version__ = "See GitHub"
+__project__ = "https://github.com/MrMattBusby/"
+
+__author__ = "{0} {1}".format(__creator__, __email__)
+__copyright__ = "Copyright (c) {year}, {owner}. ".format(
+                        owner = __author__,
+                        year = "2012") + \
+                   "All rights reserved."
+__licence__ = """\
+        BSD 3-Clause License
+
         {copyright}
 
         Redistribution and use in source and binary forms, with or without
@@ -191,6 +198,38 @@ class Switch(object):
             return True
         else:
             return False
+
+######################## Decorators ###########################################
+
+
+def entry_exit(log):
+    """Decorator for funciton entry/exit."""
+
+    def decorator(func):
+        """Actual decorator."""
+
+        def log_final_time(func, t_i):
+            """Log final function execution time."""
+            t_f = time.time()
+            log.debug("Exiting {} after: {:.3f} sec".format(func, t_f - t_i))
+
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            """Replacement function."""
+            date = datetime.isoformat(datetime.today())
+            log.debug("Entering {} at: {}".format(func.__name__, date))
+            t_i = time.time()
+            try:
+                rtn = func(*args, **kwargs)
+            except:
+                log_final_time(func.__name__, t_i)
+                raise
+            else:
+                log_final_time(func.__name__, t_i)
+            return rtn
+        return wrapper
+
+    return decorator
 
 ######################## Functions ############################################
 
