@@ -74,6 +74,7 @@ export VISUAL=/usr/bin/vim
 ### !!! OVERWRITES !!! ###
 alias bpy='bpython-curses'
 alias cal='cal -3s'
+alias tree='tree -NFC' # AS' # cleaner
 alias units='man units | tail --lines +9 | head -46' # info. version-dependant
 
 ### shortcuts/convenience ###

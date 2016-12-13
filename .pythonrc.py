@@ -96,37 +96,17 @@ try:
 except ImportError:
     # print(".pythonrc.py: no consts module found, skipping...")
     pass
+try:
+    from env import Env
+    env = Env()
+except ImportError:
+    # print(".pythonrc.py: no consts module found, skipping...")
+    env = None
 
 # Bind TAB to autocomplete in interactive mode (or use ipython)
 import readline
 import rlcompleter
 readline.parse_and_bind("tab: complete")
-
-# Initial environment variables, static
-ARCHP2 = platform.architecture()[0]              # String (not reliable in OSX)
-ARCHP = ("32bit", "64bit")[(struct.calcsize("P") == 8)]  # String (for python)
-CWD = os.getcwd()                                # String
-DISTRO = ' '.join(platform.linux_distribution())  # String
-LS = os.listdir('.')                             # List
-HOME = os.path.expanduser('~')                   # String
-HOST = platform.node()                           # String
-MACH = platform.uname()[-2]                      # String
-NULL = '\0'                                      # String
-NUL = os.devnull                                 # String (location of..)
-OS = os.uname()                                  # List
-OSNAME = os.name.upper()                         # String
-OSTITL = platform.uname()[0].title()             # String
-OSVER = platform.uname()[2][:platform.uname()[2].find('-')].title()  # String
-PLAT = sys.platform.upper()                      # String
-PROC = platform.uname()[-1]                      # String
-SERR = sys.stderr                                # File object
-SIN = sys.stdin                                  # File object
-SOUT = sys.stdout                                # File object
-CTIME = time.ctime()                             # String
-LTIME = time.localtime()                         # Time struct
-USER = pwd.getpwuid(os.getuid())[0]              # String (getlogin can fail)
-VER = sys.version_info[0:3]                      # List (python)
-VERS = '.'.join(str(idx) for idx in VER)         # String (python)
 
 ######################## Dummy Data ###########################################
 
@@ -146,6 +126,9 @@ try:
 except NameError:
     a = [[f, 2 * f, 3 * f], [10 * f, 20 * f, 30 * f]]
 
+def u(a, k=None):
+    print("a:{} k:{}".format(a, k))
+    return a
 
 class O(object):
 
@@ -608,20 +591,20 @@ Python {0}, {10}
 {7}
 {3}@{4} in {5}
 _______________________________________________________________________________
-""".format(VERS,                                                        # 0
-           OSTITL,                                                      # 1
-           OSVER,                                                       # 2
-           USER,                                                        # 3
-           HOST,                                                        # 4
-           CWD,                                                         # 5
-           OSNAME,                                                      # 6
+""".format(env.vers,                                                     # 0
+           env.ostitl,                                                   # 1
+           env.osver,                                                    # 2
+           env.user,                                                     # 3
+           env.host,                                                     # 4
+           env.cwd,                                                      # 5
+           env.osname,                                                   # 6
            time.strftime("%a %b %d %H:%M:%S %Z %Y -- w%W d%j",
                          time.localtime()),  # Like $date                # 7
-           DISTRO,                                                      # 8
-           PLAT,                                                        # 9
-           ARCHP,                                                       # 10
-           PROC,                                                        # 11
-           MACH))                                                       # 12
+           env.distro,                                                   # 8
+           env.plat,                                                     # 9
+           env.archp,                                                    # 10
+           env.proc,                                                     # 11
+           env.mach))                                                    # 12
 
 ######################## TEMP #################################################
 
@@ -634,4 +617,5 @@ def work(start=730, stop=1630, lunch=100):
 ######################## Execution ############################################
 
 if __name__ == '__main__':
-    _welcome()
+    if env is not None:
+        _welcome()

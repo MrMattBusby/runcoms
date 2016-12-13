@@ -47,20 +47,20 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 
 " Bundles
-Plugin 'tpope/vim-fugitive'
+"Plugin 'tpope/vim-fugitive'
 Plugin 'brookhong/cscope.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'majutsushi/tagbar'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-ragtag'
-Plugin 'othree/html5.vim'
+"Plugin 'othree/html5.vim'
 Plugin 'kien/ctrlp.vim'
 Plugin 'Lokaltog/powerline'
 """Plugin 'powerline/powerline'
 Plugin 'flazz/vim-colorschemes'
 Plugin 'Yggdroot/indentLine'
-Plugin 'ervandew/supertab'
+"Plugin 'ervandew/supertab'
 Plugin 'godlygeek/tabular' " Must be above vim-markdown
 """Plugin 'nathanaelkane/vim-indent-guides'
 """Plugin 'gabrielelana/vim-markdown'
@@ -70,9 +70,9 @@ Plugin 'fholgado/minibufexpl.vim'
 Plugin 'terryma/vim-expand-region'
 Plugin 'terryma/vim-smooth-scroll'
 Plugin 'fisadev/FixedTaskList.vim'
-Plugin 'vim-scripts/python_match.vim'
+"Plugin 'vim-scripts/python_match.vim'
 Plugin 'junegunn/vim-easy-align'
-Plugin 'Valloric/YouCompleteMe'
+Plugin 'Valloric/YouCompleteMe' " **NOTE** This has a compiled component!! https://github.com/Valloric/YouCompleteMe#fedora-linux-x64
 """Plugin 'othree/html5-syntax.vim' " Not tested
 """Plugin 'pangloss/vim-javascript' " Not tested
 """Plugin 'Lokaltog/vim-easymotion'
@@ -515,7 +515,7 @@ let g:miniBufExplMapCTabSwitchBufs=1
 "--------------
 " YouCompleteMe
 "--------------
-let g:ycm_global_ycm_extra_conf = "~/.vim/bundle/YouCompleteMe/third_party/ycmd/examples/.ycm_extra_conf.py"
+"let g:ycm_global_ycm_extra_conf = "~/.vim/bundle/YouCompleteMe/third_party/ycmd/examples/.ycm_extra_conf.py"
 
 "----------
 " NERD Tree
@@ -558,19 +558,19 @@ let NERDTreeBookmarksFile="~/.NERDTreeBookmarks"
 "----------
 
 " Include dirs
-let g:syntastic_c_include_dirs = [ '' ]
+"let g:syntastic_c_include_dirs = [ '' ]
 
 " Other compiler options
-let g:syntastic_c_compiler_options = ''
+"let g:syntastic_c_compiler_options = ''
 
 " Start check on open, is slow
 """let g:syntastic_check_on_open = 0
 
 " Parse header files?
-let g:syntastic_c_check_header = 1
+"let g:syntastic_c_check_header = 1
 
 " Remove errors from other included files -- not sure if this actually works
-let g:syntastic_c_remove_include_errors = 1
+"let g:syntastic_c_remove_include_errors = 1
 
 "==============================================================================
 " Depricated Plugin

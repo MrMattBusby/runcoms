@@ -117,7 +117,6 @@ alias ipy3='ipython3'
 alias lsblk='lsblk -o NAME,OWNER,GROUP,RM,RO,TYPE,SIZE,MODEL,MOUNTPOINT'
 alias ping='ping -i.5 -c6 -W1' # send 6 packets, no need ^C
 alias top='htop 2> $NUL || /usr/bin/top' # htop not always exist
-alias tree='tree -NFCAS' # cleaner
 
 #############
 ### typos ###
