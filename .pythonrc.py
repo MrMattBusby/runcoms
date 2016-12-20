@@ -131,9 +131,10 @@ def u(a, k=None):
     return a
 
 class O(object):
-
+    var_cls = 10
     def __init__(self):
         self.__dict__ = d
+        self.var_inst = 20
 o = O()
 try:
     p = pd.DataFrame(data={'A': a[0], 'B': a[1]}, index=[0, 1, 2])

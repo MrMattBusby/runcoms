@@ -58,7 +58,6 @@ Plugin 'tpope/vim-ragtag'
 Plugin 'kien/ctrlp.vim'
 Plugin 'Lokaltog/powerline'
 """Plugin 'powerline/powerline'
-Plugin 'flazz/vim-colorschemes'
 Plugin 'Yggdroot/indentLine'
 "Plugin 'ervandew/supertab'
 Plugin 'godlygeek/tabular' " Must be above vim-markdown
@@ -78,6 +77,10 @@ Plugin 'Valloric/YouCompleteMe' " **NOTE** This has a compiled component!! https
 """Plugin 'Lokaltog/vim-easymotion'
 """Plugin 'terryma/vim-multiple-cursors'
 
+" Colorscheme
+Plugin 'flazz/vim-colorschemes'
+Plugin 'nanotech/jellybeans.vim.git'
+
 " No longer used
 """Plugin 'scrooloose/syntastic'
 
@@ -93,9 +96,9 @@ filetype plugin indent on
 let mapleader = ","
 
 " Color term
-"set t_Co=88
-set t_Co=128
-colorscheme default
+"set t_Co=128 (use with default colorscheme)
+set t_Co=256
+colorscheme jellybeans
 
 " Prevent funny characters, etc
 set encoding=utf-8
@@ -200,8 +203,12 @@ set cpoptions=ces$
 
 " Custom status line
 """set stl=%f%m%r\ \ b%n\ \ (%Y)\ \ %p%%\ \ R:%l/%L\ \ C:%c\ \ B:0x%O=0x%B
+" -- OR --
 " Powerline
-"source ~/.vim/bundle/powerline/powerline/bindings/vim/plugin/powerline.vim
+" Terminal Font needs to be hacked or customized:
+" https://github.com/powerline/fonts
+" https://powerline.readthedocs.io/en/latest/installation/linux.html
+source ~/.vim/bundle/powerline/powerline/bindings/vim/plugin/powerline.vim
 
 " Always a status line of height 2
 set laststatus=2
@@ -485,6 +492,13 @@ vnoremap > >gv
 "==============================================================================
 " Plugin Settings
 "==============================================================================
+
+"-----------
+" Indentline
+"-----------
+
+" Indent character
+let g:indentLine_char = '│' "┆ | ¦ │
 
 "--------
 " Tag Bar
