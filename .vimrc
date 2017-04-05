@@ -48,7 +48,7 @@ Plugin 'gmarik/Vundle.vim'
 
 " Bundles
 "Plugin 'tpope/vim-fugitive'
-Plugin 'brookhong/cscope.vim'
+"Plugin 'brookhong/cscope.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'majutsushi/tagbar'
@@ -70,8 +70,9 @@ Plugin 'terryma/vim-expand-region'
 Plugin 'terryma/vim-smooth-scroll'
 Plugin 'fisadev/FixedTaskList.vim'
 "Plugin 'vim-scripts/python_match.vim'
-Plugin 'junegunn/vim-easy-align'
-Plugin 'Valloric/YouCompleteMe' " **NOTE** This has a compiled component!! https://github.com/Valloric/YouCompleteMe#fedora-linux-x64
+"Plugin 'junegunn/vim-easy-align'
+Plugin 'vim-scripts/Align'
+"Plugin 'Valloric/YouCompleteMe' " **NOTE** This has a compiled component!! https://github.com/Valloric/YouCompleteMe#fedora-linux-x64
 """Plugin 'othree/html5-syntax.vim' " Not tested
 """Plugin 'pangloss/vim-javascript' " Not tested
 """Plugin 'Lokaltog/vim-easymotion'
@@ -385,7 +386,7 @@ noremap <silent> <leader>\/
  nnoremap <leader>s :w!<CR>:silent !astyle -A2yCSUs3NLwYm0M40fpHk3W3j -xe %<CR>:e<CR>:redraw!<CR>
 
 " Sort selection
-vmap <silent> <leader>s :!sort<CR>
+vmap <silent> <leader>s :!sort -u<CR>
 
 " Display buffers
 nmap <silent> <leader>l :ls!<CR>
@@ -397,9 +398,16 @@ nmap <silent> <leader>rp :w<CR>:lcd %:h<CR>:!python %<CR>
 noremap <silent> <leader>p s()<ESC>PF(
 vnoremap <silent> <leader>p c()<ESC>PF(
 
+" Wrap in {}
+noremap <silent> <leader>w ddO{<CR>}<UP><ESC>p
+vnoremap <silent> <leader>w dO{<CR>}<UP><ESC>p
+
 " Spacize
 noremap <silent> <leader><space> s  <ESC>P
 vnoremap <silent> <leader><space> c  <ESC>PB
+
+" Find word under cursor in any file (f is a custom scipt kept in ~/bin)
+nnoremap <leader>f :!f i <C-r><C-w><CR>
 
 " Search the current file for the word under the cursor and display matches
 " TODO search all files in dir? :vimgrep <pat> **/*.xxx<CR>:copen<CR>
