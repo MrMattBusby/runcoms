@@ -386,7 +386,7 @@ noremap <silent> <leader>\/
  nnoremap <leader>s :w!<CR>:silent !astyle -A2yCSUs3NLwYm0M40fpHk3W3j -xe %<CR>:e<CR>:redraw!<CR>
 
 " Sort selection
-vmap <silent> <leader>s :!sort -u<CR>
+vmap <silent> <leader>s :!sort -un<CR>
 
 " Display buffers
 nmap <silent> <leader>l :ls!<CR>
