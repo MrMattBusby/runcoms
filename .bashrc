@@ -96,10 +96,15 @@ alias ssh='ssh -Y' # FW X
 ### for safety ###
 alias cp='cp -i'
 alias ln='ln -i'
-alias mf='mv -i' # typo, haven't ever used mf
-alias mv='mv -i'
+alias mf='mv -iv' # typo, haven't ever used mf
+alias mv='mv -iv'
 alias rm='rm -i'
 alias tar='tar_func'
+
+### force ###
+alias CP='/usr/bin/cp -rf'
+alias MV='/usr/bin/mv -vf'
+alias RM='/usr/bin/rm -rf'
 
 ### customize (revert using `$\<command>`) ###
 alias cd='cd_func' # search subs
