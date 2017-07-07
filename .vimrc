@@ -269,6 +269,9 @@ set incsearch
 " Syntax coloring slows down the world
 set synmaxcol=2048
 
+" Enter digraphs in insert mode with `ch0<BS>ch1`
+"set digraph
+
 "==============================================================================
 " Custom Functions
 "==============================================================================

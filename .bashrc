@@ -91,7 +91,9 @@ alias info='info --vi-keys'
 alias less='less -R'  # decode colors
 alias ls='ls --color=auto' # better with colors
 alias mkdir='mkdir -pv' # create parents
+alias shutdown='shutdown -H now'
 alias ssh='ssh -Y' # FW X
+alias view='vim -R'
 
 ### for safety ###
 alias cp='cp -i'
@@ -139,6 +141,8 @@ alias L='less'
 alias Less='less'
 alias LEss='less'
 alias mc='mv'
+alias n='>&2 echo  "No! Okay already :/" && false'
+alias y='>&2 echo "Yes! Okay already :)" && true'
 
 #############################
 ### shortcuts/convenience ###
@@ -160,11 +164,13 @@ alias cl-='cl -;'
 alias cpu='lscpu || cat /proc/cpuinfo'
 alias diffd='diff -r --brief' # diff directories
 alias hist='history | tail -15'
+alias histclr=' history -c && history -w' # clear all
 alias hl='grep -E --color=auto -e ^ -e' # highlight + preserve other output
 alias la='ls --color=auto -Ahlpq1' # list all files
 alias ld='ls --color=auto -d .*/ */ 2>/dev/null' # list directories only, simple
 alias lt='ls --color=auto -hlpq1t' # list all non .* files, by time
 alias l.='ls --color=auto -d .* 2>/dev/null' # list all .* files
+alias logout='gnome-session-quit --no-prompt --logout || gnome-session-save --logout'
 alias man2='man 2'
 alias man3='man 3'
 alias man4='man 4'
@@ -288,7 +294,7 @@ function lc() {
 # Make a directory and navigate to it
 function mkgo() {
   if [ $# -eq 1 ] ; then
-    echo -e "${CMDCOL}mkdir -pv $1 && cd $1${NC}"
+    echo -e "${CMDCOL}mkdir -pv $1 && pushd $1${NC}"
     mkdir -pv $1 && pushd $1
   else
     echo -e "${CMDCOL}mkgo: Use only 1 argument!${NC}"
