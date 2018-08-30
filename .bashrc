@@ -185,6 +185,7 @@ alias pts='echo "pts: you are $(tty)" | egrep /.\* && echo && ps | head -1 && ps
 alias py='python -q 2> $NUL || python'
 alias py2='python2'
 alias py3='python3 -q || $(\which python3|head -1) -q'
+alias shm='cat /proc/sysvipc/shm'
 alias tarc='tar -czvpf' # tar aliased to tar_func() for safety
 alias tart='\tar -tzvpf'
 alias tarx='\tar -xzvpf'
@@ -210,6 +211,7 @@ alias mcm='make clean && make'
 
 ### svn ###
 function sd() {
+  # svn diff in color
   if command -v colordiff &>/dev/null ; then svn diff "$@" | colordiff | less -R ; else svn diff "$@" | less ; fi
 }
 function sl() {
@@ -512,7 +514,7 @@ export PROMPT_COMMAND='\
 export PREV_STATUS="$?";\
 export PREV_COMMAND="$(history|tail -1|sed s/.......//|sed s/\\\\//g)";\
 create_ps "$PREV_STATUS";\
-echo -ne "\033]0;[$(tty|egrep -o [[:digit:]])] ${USER}@${HOSTNAME%%.*}> ${PREV_COMMAND}\007";'
+echo -ne "\033]0;[$(tty|egrep -o [[:digit:]])] ${USER}@${HOSTNAME%%.*} \$ ${PREV_COMMAND}\007";'
 
 case "$-" in
   *i*) # only in interactive mode (don't want to write to stdout non-interactively like scp)

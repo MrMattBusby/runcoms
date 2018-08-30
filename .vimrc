@@ -42,56 +42,59 @@ set nocompatible
 filetype off
 
 " Vundle
-set runtimepath+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-Plugin 'gmarik/Vundle.vim'
-
-" Bundles
-"Plugin 'tpope/vim-fugitive'
-"Plugin 'brookhong/cscope.vim'
-Plugin 'scrooloose/nerdtree'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'majutsushi/tagbar'
-Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-ragtag'
-"Plugin 'othree/html5.vim'
-Plugin 'kien/ctrlp.vim'
-Plugin 'Lokaltog/powerline'
-"""Plugin 'powerline/powerline'
-Plugin 'Yggdroot/indentLine'
-"Plugin 'ervandew/supertab'
-Plugin 'godlygeek/tabular' " Must be above vim-markdown
-"""Plugin 'nathanaelkane/vim-indent-guides'
-"""Plugin 'gabrielelana/vim-markdown'
-"""Plugin 'tpope/vim-markdown'
-Plugin 'plasticboy/vim-markdown'
-Plugin 'fholgado/minibufexpl.vim'
-Plugin 'terryma/vim-expand-region'
-Plugin 'terryma/vim-smooth-scroll'
-Plugin 'fisadev/FixedTaskList.vim'
-"Plugin 'vim-scripts/python_match.vim'
-"Plugin 'junegunn/vim-easy-align'
-Plugin 'vim-scripts/Align'
-"Plugin 'Valloric/YouCompleteMe' " **NOTE** This has a compiled component!! https://github.com/Valloric/YouCompleteMe#fedora-linux-x64
-"""Plugin 'othree/html5-syntax.vim' " Not tested
-"""Plugin 'pangloss/vim-javascript' " Not tested
-"""Plugin 'Lokaltog/vim-easymotion'
-"""Plugin 'terryma/vim-multiple-cursors'
-
-" Colorscheme
-Plugin 'flazz/vim-colorschemes'
-Plugin 'nanotech/jellybeans.vim.git'
-
-" No longer used
-"""Plugin 'scrooloose/syntastic'
-
-call vundle#end()
+"set runtimepath+=~/.vim/bundle/Vundle.vim
+"call vundle#begin()
+"Plugin 'gmarik/Vundle.vim'
+"
+"" Bundles
+""Plugin 'tpope/vim-fugitive'
+""Plugin 'brookhong/cscope.vim'
+"Plugin 'scrooloose/nerdtree'
+"Plugin 'scrooloose/nerdcommenter'
+"Plugin 'majutsushi/tagbar'
+"Plugin 'tpope/vim-surround'
+"Plugin 'tpope/vim-ragtag'
+""Plugin 'othree/html5.vim'
+"Plugin 'kien/ctrlp.vim'
+"Plugin 'Lokaltog/powerline'
+""""Plugin 'powerline/powerline'
+"Plugin 'Yggdroot/indentLine'
+""Plugin 'ervandew/supertab'
+"Plugin 'godlygeek/tabular' " Must be above vim-markdown
+""""Plugin 'nathanaelkane/vim-indent-guides'
+""""Plugin 'gabrielelana/vim-markdown'
+""""Plugin 'tpope/vim-markdown'
+"Plugin 'plasticboy/vim-markdown'
+"Plugin 'fholgado/minibufexpl.vim'
+"Plugin 'terryma/vim-expand-region'
+"Plugin 'terryma/vim-smooth-scroll'
+"Plugin 'fisadev/FixedTaskList.vim'
+""Plugin 'vim-scripts/python_match.vim'
+""Plugin 'junegunn/vim-easy-align'
+"Plugin 'vim-scripts/Align'
+""Plugin 'Valloric/YouCompleteMe' " **NOTE** This has a compiled component!! https://github.com/Valloric/YouCompleteMe#fedora-linux-x64
+""""Plugin 'othree/html5-syntax.vim' " Not tested
+""""Plugin 'pangloss/vim-javascript' " Not tested
+""""Plugin 'Lokaltog/vim-easymotion'
+""""Plugin 'terryma/vim-multiple-cursors'
+"
+"" Colorscheme
+"Plugin 'flazz/vim-colorschemes'
+"Plugin 'nanotech/jellybeans.vim.git'
+"
+"" No longer used
+""""Plugin 'scrooloose/syntastic'
+"
+"call vundle#end()
 
 " Switch on syntax highlighting
 syntax on
 
 " Set filetype stuff
 filetype plugin indent on
+autocmd BufNewFile,BufRead *.c.svn-base set syntax=c
+autocmd BufNewFile,BufRead *.py.svn-base set syntax=python
+
 
 " Leader
 let mapleader = ","
@@ -99,7 +102,7 @@ let mapleader = ","
 " Color term
 "set t_Co=128 (use with default colorscheme)
 set t_Co=256
-colorscheme jellybeans
+"colorscheme jellybeans
 
 " Prevent funny characters, etc
 set encoding=utf-8
@@ -209,7 +212,7 @@ set cpoptions=ces$
 " Terminal Font needs to be hacked or customized:
 " https://github.com/powerline/fonts
 " https://powerline.readthedocs.io/en/latest/installation/linux.html
-source ~/.vim/bundle/powerline/powerline/bindings/vim/plugin/powerline.vim
+"source ~/.vim/bundle/powerline/powerline/bindings/vim/plugin/powerline.vim
 
 " Always a status line of height 2
 set laststatus=2
