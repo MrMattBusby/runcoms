@@ -510,7 +510,7 @@ case $TERM in
 esac
 
 # Set PS and Terminal text
-export PROMPT_COMMAND='\
+export PROMPT_COMMAND_B='\
 export PREV_STATUS="$?";\
 export PREV_COMMAND="$(history|tail -1|sed s/.......//|sed s/\\\\//g)";\
 create_ps "$PREV_STATUS";\
