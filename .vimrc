@@ -45,11 +45,10 @@ filetype off
 set runtimepath+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
-"Plugin 'gmarik/Vundle.vim'
 "
 "" Bundles
 Plugin 'vim-airline/vim-airline'
-""Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-fugitive'
 ""Plugin 'brookhong/cscope.vim'
 "Plugin 'scrooloose/nerdtree'
 "Plugin 'scrooloose/nerdcommenter'
@@ -58,7 +57,7 @@ Plugin 'vim-airline/vim-airline'
 "Plugin 'tpope/vim-ragtag'
 ""Plugin 'othree/html5.vim'
 "Plugin 'kien/ctrlp.vim'
-"Plugin 'Lokaltog/powerline'
+Plugin 'Lokaltog/powerline'
 """"Plugin 'powerline/powerline'
 "Plugin 'Yggdroot/indentLine'
 ""Plugin 'ervandew/supertab'
@@ -66,7 +65,7 @@ Plugin 'vim-airline/vim-airline'
 """"Plugin 'nathanaelkane/vim-indent-guides'
 """"Plugin 'gabrielelana/vim-markdown'
 """"Plugin 'tpope/vim-markdown'
-"Plugin 'plasticboy/vim-markdown'
+Plugin 'plasticboy/vim-markdown'
 "Plugin 'fholgado/minibufexpl.vim'
 "Plugin 'terryma/vim-expand-region'
 "Plugin 'terryma/vim-smooth-scroll'
@@ -81,7 +80,7 @@ Plugin 'vim-airline/vim-airline'
 """"Plugin 'terryma/vim-multiple-cursors'
 "
 "" Colorscheme
-"Plugin 'flazz/vim-colorschemes'
+Plugin 'flazz/vim-colorschemes'
 "Plugin 'nanotech/jellybeans.vim.git'
 "
 "" No longer used
