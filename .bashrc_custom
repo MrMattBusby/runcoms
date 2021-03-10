@@ -67,8 +67,9 @@ export LANGUAGE=en_US.UTF-8 #'C'
 export LC_ALL=en_US.UTF-8 #'C'
 export LC_COLLATE=en_US.UTF-8 #'C'
 export NAME=m_busby
-#export PYTHONPATH=~/bin:~/lib:~/scripts # ~/.local/lib/python2.7/site-packages
-#export PYTHONSTARTUP=~/.pythonrc.py
+PYTHONPATH=$PYTHONPATH:~/bin:~/lib:~/scripts # ~/.local/lib/python2.7/site-packages
+export PYTHONPATH
+export PYTHONSTARTUP=~/.pythonrc.py
 export VISUAL=/usr/bin/vim
 
 ### !!! OVERWRITES !!! ###

@@ -42,11 +42,13 @@ set nocompatible
 filetype off
 
 " Vundle
-"set runtimepath+=~/.vim/bundle/Vundle.vim
-"call vundle#begin()
+set runtimepath+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+Plugin 'VundleVim/Vundle.vim'
 "Plugin 'gmarik/Vundle.vim'
 "
 "" Bundles
+Plugin 'vim-airline/vim-airline'
 ""Plugin 'tpope/vim-fugitive'
 ""Plugin 'brookhong/cscope.vim'
 "Plugin 'scrooloose/nerdtree'
@@ -85,7 +87,7 @@ filetype off
 "" No longer used
 """"Plugin 'scrooloose/syntastic'
 "
-"call vundle#end()
+call vundle#end()
 
 " Switch on syntax highlighting
 syntax on
@@ -128,6 +130,7 @@ autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 if version > 702
   " Set colorcolumn
   set colorcolumn=80
+  set ruler
    
   " Mouse to all modes
   "set mouse=a
