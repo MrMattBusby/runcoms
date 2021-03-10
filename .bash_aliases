@@ -43,8 +43,8 @@ fi
 if [ -f /etc/bash_completion ]; then
   . /etc/bash_completion
 fi
-if [ -f ~/.bashrc_custom ]; then
-  . ~/.bashrc_custom
+if [ -f ~/.bash_custom ]; then
+  . ~/.bash_custom
 fi
 
 ######################
