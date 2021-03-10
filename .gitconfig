@@ -4,12 +4,15 @@
 [alias]
 	aliases  = !cat ~/.gitconfig
 	st       = status
+	stat     = status
 	co       = checkout
 	ci       = commit
+	cm       = commit
 	reci     = commit --amend --no-edit
 	unstage  = reset HEAD --
 	save     = !git add -A && git commit -m 'chore: commit save point'
 	done     = !git push origin HEAD
+	lazy     = !git save && !git done
 	br       = branch
 	list     = branch -vv
 	branches = branch -vv
