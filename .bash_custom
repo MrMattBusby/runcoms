@@ -66,6 +66,7 @@ export LANG=en_US.UTF-8 #'C'
 export LANGUAGE=en_US.UTF-8 #'C'
 export LC_ALL=en_US.UTF-8 #'C'
 export LC_COLLATE=en_US.UTF-8 #'C'
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:~/lib
 export NAME=m_busby
 PYTHONPATH=$PYTHONPATH:~/bin:~/lib:~/scripts # ~/.local/lib/python2.7/site-packages
 export PYTHONPATH
