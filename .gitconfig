@@ -2,26 +2,27 @@
 	name     = Matt Busby
 	email    = m_busby
 [alias]
-	aliases  = !cat ~/.gitconfig
+	aliases  = !git config -l | grep alias | sed \"s/alias.//\" | sort | sed \"s/=/ = /\"
+	conf     = !git config -l | grep -v alias
 	st       = status
 	stat     = status
-	co       = checkout
-	ci       = commit
-	cm       = commit
-	reci     = commit --amend --no-edit
-	unstage  = reset HEAD --
-	save     = !git add -A && git commit -m 'chore: commit save point'
-	done     = !git push origin HEAD
 	br       = branch
 	list     = branch -vv
 	branches = branch -vv
 	del      = branch -D
 	pr       = pull --rebase
+	co       = checkout
+	ci       = commit
+	cm       = commit
+	re       = commit --amend --no-edit
+	save     = !git add -A && git commit -m 'chore: commit save point'
+	done     = !git push origin HEAD
+	unstage  = reset HEAD --
 	undo     = reset HEAD~1 --mixed
+	restart  = ~git reset --hard
 	staged   = log -3 --pretty=format:\"%h %ad | %s%d [%an]\" --date=short
 	hist     = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
 	last     = log -3 HEAD
 	type     = cat-file -t
 	dump     = cat-file -p
-	restart  = ~git reset --hard
 	vis      = !gitk
