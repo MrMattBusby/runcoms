@@ -41,11 +41,10 @@
 set nocompatible
 filetype off
 
-" Vundle
+" Vundle (Plugin 'VundleVim/Vundle.vim')
 set runtimepath+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
-Plugin 'VundleVim/Vundle.vim'
-"
+
 "" Bundles
 Plugin 'vim-airline/vim-airline'
 Plugin 'tpope/vim-fugitive'
