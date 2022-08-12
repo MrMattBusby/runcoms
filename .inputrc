@@ -42,6 +42,7 @@
 
 set convert-meta on
 set completion-ignore-case on
-set editing-mode on 
+set editing-mode on
+set bell-style none
 set show-all-if-ambiguous on
 set show-all-if-unmodified on
