@@ -1,17 +1,3 @@
 # Runcoms
 
-Various system run commands for Linux
-
-# Highlights
-
-## .bashrc
-
-- 
-
-## .pythonrc
-
-- 
-
-## .vimrc
-
-- 
+Various system run commands (.rc's), startup scripts, configurations, etc. for Linux or Cygwin
