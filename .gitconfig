@@ -1,28 +1,80 @@
+# How to use:
+# [include]
+#	path        = /path/to/.gitconfig
+
 [user]
-	name     = Matt Busby
-	email    = m_busby
+	name        = Matt Busby
+	
 [alias]
-	aliases  = !git config -l | grep alias | sed \"s/alias.//\" | sort | sed \"s/=/ = /\"
-	conf     = !git config -l | grep -v alias
-	st       = status
-	stat     = status
-	br       = branch
-	list     = branch -vv
-	branches = branch -vv
-	del      = branch -D
-	pr       = pull --rebase
-	co       = checkout
-	ci       = commit
-	cm       = commit
-	re       = commit --amend --no-edit
-	save     = !git add -A && git commit -m 'chore: commit save point'
-	done     = !git push origin HEAD
-	unstage  = reset HEAD --
-	undo     = reset HEAD~1 --mixed
-	restart  = ~git reset --hard
-	staged   = log -3 --pretty=format:\"%h %ad | %s%d [%an]\" --date=short
-	hist     = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
-	last     = log -3 HEAD
-	type     = cat-file -t
-	dump     = cat-file -p
-	vis      = !gitk
+	# CONFIG
+	cfg         = config -l
+	alias       = config --get-regexp ^alias
+	fetchall    = !git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*" && git fetch origin
+	fetchadd    = "!f() { git remote set-branches --add origin \"$1\" && git fetch origin && git switch \"$1\"; }; f"
+	
+	# SIMPLE SHORTCUTS
+	st          = status -sb
+	br          = branch
+	ci          = commit -v
+	cm          = commit -m
+	co          = checkout
+	cls         = clear -df
+	df          = diff
+	dc          = diff --cached
+	pr          = pull --rebase
+	pl          = pull
+	ps          = push origin
+	rb          = rebase
+	rbc         = rebase --continue
+	rba         = rebase --abort
+	squash      = rebase -i
+	sw          = switch
+	swc         = switch -c
+	
+	# REFS/BRANCHES
+	del         = branch -d
+	delete      = branch -D
+	get         = !git fetch origin && git switch 
+	bra         = branch -avv
+	brr         = branch -rv
+	brl         = branch -lv
+	brav        = remote show origin
+	refl        = show-ref -d
+	refr        = ls-remote --heads
+	
+	# INDEX
+	unstage     = reset --mixed HEAD --
+	save        = commit -am 'Save point'
+	done        = push origin HEAD
+	amend       = commit --amend
+	uncommit    = reset --soft HEAD~1 --
+	res         = reset --hard HEAD --
+	readd       = add -u
+	onto        = !git fetch origin && git rebase
+	shallow     = clone --single-branch --depth 50 -b 
+	
+	# PUSHES
+	new         = "!f() { git switch -c \"$1\" && git push -u origin \"$1\"; }; f"
+	tg          = "!f() { git tag -a \"$1\" -m \"$2\" && git push origin \"$1\"; }; f"
+	
+	# STASHES
+	st          = stash
+	sl          = stash list
+	sp          = stash pop
+	sa          = stash apply
+	ss          = stash save
+	
+	# HISTORY
+	l           = log --oneline
+	ll          = log --pretty=format:'%C(yellow)%h%Creset %Cgreen(%ad) %C(bold blue)<%an>%Creset %s' --date=short
+	lg          = log --graph --pretty=format:'%Cred%h%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+	last        = log -3 HEAD
+	hist        = log origin..HEAD --decorate
+	lf          = log --follow -p -- # log of a file
+	
+	# FILES
+	type        = cat-file -t
+	dump        = cat-file -p
+	
+	# VISUALS
+	vis         = !gitk
