@@ -10,7 +10,7 @@
 	cfg         = config -l
 	alias       = config --get-regexp ^alias
 	fetchall    = !git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*" && git fetch origin
-	fetchadd    = "!f() { git remote set-branches --add origin \"$1\" && git fetch origin && git switch \"$1\"; }; f"
+	fetchone    = "!f() { git remote set-branches --add origin \"$1\" && git fetch origin && git switch \"$1\; }; f"
 	
 	# SIMPLE SHORTCUTS
 	st          = status -sb
@@ -40,7 +40,7 @@
 	brl         = branch -lv
 	brav        = remote show origin
 	refl        = show-ref -d
-	refr        = ls-remote --heads
+	refr        = ls-remote
 	
 	# INDEX
 	unstage     = reset --mixed HEAD --
@@ -58,19 +58,19 @@
 	tg          = "!f() { git tag -a \"$1\" -m \"$2\" && git push origin \"$1\"; }; f"
 	
 	# STASHES
-	st          = stash
-	sl          = stash list
-	sp          = stash pop
-	sa          = stash apply
-	ss          = stash save
+	sh          = stash
+	shl         = stash list
+	shp         = stash pop
+	sha         = stash apply
+	shs         = stash save
 	
 	# HISTORY
 	l           = log --oneline
 	ll          = log --pretty=format:'%C(yellow)%h%Creset %Cgreen(%ad) %C(bold blue)<%an>%Creset %s' --date=short
 	lg          = log --graph --pretty=format:'%Cred%h%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
-	last        = log -3 HEAD
-	hist        = log origin..HEAD --decorate
 	lf          = log --follow -p -- # log of a file
+	last        = log -3 HEAD
+	hist        = log origin..HEAD --decorate # history of current branch since breaking off from parent
 	
 	# FILES
 	type        = cat-file -t
