@@ -8,6 +8,8 @@
 [alias]
 	# CONFIG
 	cfg         = config -l
+	cfgg        = config --global -l
+	cfgl        = config --local -l
 	alias       = config --get-regexp ^alias
 	fetchall    = !git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*" && git fetch origin
 	fetchone    = "!f() { git remote set-branches --add origin \"$1\" && git fetch origin && git switch \"$1\; }; f"
@@ -38,9 +40,9 @@
 	bra         = branch -avv
 	brr         = branch -rv
 	brl         = branch -lv
-	brav        = remote show origin
-	refl        = show-ref -d
-	refr        = ls-remote
+	brv         = remote show origin # most verbose
+	refsl       = show-ref -d # local refs
+	refsr       = ls-remote # remote refs
 	
 	# INDEX
 	unstage     = reset --mixed HEAD --
