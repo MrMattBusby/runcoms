@@ -12,7 +12,7 @@
 	cfgl        = config --local -l
 	alias       = config --get-regexp ^alias
 	fetchall    = !git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*" && git fetch origin
-	fetchone    = "!f() { git remote set-branches --add origin \"$1\" && git fetch origin && git switch \"$1\; }; f"
+	fetchone    = "!f() { git remote set-branches --add origin \"$1\" && git fetch origin && git switch \"$1\"; }; f"
 	
 	# SIMPLE SHORTCUTS
 	st          = status -sb
