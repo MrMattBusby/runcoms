@@ -9,7 +9,7 @@
 	# CONFIG
 	fetchone    = "!f() { git remote set-branches --add origin \"$1\" && git fetch origin && git switch \"$1\"; }; f" # readd one branch after doing single-branch
 	fetchall    = !git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*" && git fetch origin # reconfigured config to fetch all remote refs
-	alias       = "!f() { git config --get-regexp ^alias.*\"$1\"; }; f"
+	alias       = "!f() { git config --get-regexp ^alias.\"$1\"; }; f"
 	cfgg        = config --global -l
 	cfgl        = config --local -l
 	cfg         = config -l
