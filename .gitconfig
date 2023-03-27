@@ -7,23 +7,25 @@
 	
 [alias]
 	# CONFIG
-	fetchone    = "!f() { git remote set-branches --add origin \"$1\" && git fetch origin && git switch \"$1\"; }; f" # readd one branch after doing single-branch
-	fetchall    = !git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*" && git fetch origin # reconfigured config to fetch all remote refs
 	alias       = "!f() { git config --get-regexp ^alias.\"$1\"; }; f"
+	cfg         = config -l
 	cfgg        = config --global -l
 	cfgl        = config --local -l
-	cfg         = config -l
+	fetchall    = !git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*" && git fetch origin # reconfigured config to fetch all remote refs
+	fetchone    = "!f() { git remote set-branches --add origin \"$1\" && git fetch origin && git switch \"$1\"; }; f" # readd one branch after doing single-branch
 	
 	# SIMPLE SHORTCUTS
 	br          = branch
-	co          = checkout
+	ci          = commit -v
 	cls         = clear -df # removed all unversioned files
 	cm          = commit -m
-	ci          = commit -v
+	co          = checkout
 	d           = diff
-	dl          = diff HEAD^ HEAD
-	dless       = !git diff | less
 	dc          = diff --cached
+	dl          = diff HEAD^ HEAD # diff last
+	dless       = !git diff | less
+	dt          = difftool
+	mt          = mergetool
 	plm         = pull
 	plr         = pull --rebase
 	rb          = rebase
@@ -36,36 +38,36 @@
 	swc         = switch -c
 	
 	# REFS/BRANCHES
-	get         = !git fetch origin && git switch # get an existing branch
 	bra         = branch -avv
+	brl         = branch -lv
+	brn         = rev-parse --abbrev-ref HEAD # get branch name
+	brr         = branch -rv
+	brv         = remote show origin # most verbose
 	del         = branch --delete
 	delf        = branch --delete --force
-	brl         = branch -lv
-	brr         = branch -rv
+	get         = !git fetch origin && git switch # get an existing branch
 	prune       = fetch --all --prune # delete local branches after they've been remotely deleted
-	refsr       = ls-remote # remote refs (e.g. if you've done a single-branch and need to see everything available)
-	brn         = rev-parse --abbrev-ref HEAD # get branch name
-	brv         = remote show origin # most verbose
 	refsl       = show-ref -d # local refs
+	refsr       = ls-remote # remote refs (e.g. if you've done a single-branch and need to see everything available)
 	
 	# INDEX/ETC
-	onto        = !git fetch origin && git rebase
-	readd       = add -u
-	shallow     = clone --single-branch --depth 50 -b 
 	amend       = commit --amend
-	save        = commit -am 'Save point'
 	incoming    = !git fetch origin && git diff HEAD FETCH_HEAD
 	incoming2   = "!f() { git fetch origin \"$1\" && git diff HEAD..origin/\"$1\"; }; f"
+	onto        = !git fetch origin && git rebase
+	readd       = add -u
 	restart     = reset --hard HEAD --
-	unstage     = reset --mixed HEAD --
+	save        = commit -am 'Save point'
+	shallow     = clone --single-branch --depth 50 -b 
 	uncommit    = reset --soft HEAD~1 --
+	unstage     = reset --mixed HEAD --
 	
 	# PUSHES
 	dela        = "!f() { git branch -d \"$1\" && git push origin --delete \"$1\"; }; f" # delete all
-	new         = "!f() { git switch -c \"$1\" && git push -u origin \"$1\"; }; f"
-	tg          = "!f() { git tag -a \"$1\" -m \"$2\" && git push origin \"$1\"; }; f" # delete remote
 	delr        = push origin --delete # {branch}
 	done        = push origin HEAD
+	new         = "!f() { git switch -c \"$1\" && git push -u origin \"$1\"; }; f"
+	tg          = "!f() { git tag -a \"$1\" -m \"$2\" && git push origin \"$1\"; }; f" # delete remote
 	
 	# STASHES
 	sh          = stash
@@ -75,18 +77,18 @@
 	shs         = stash save
 	
 	# HISTORY
-	lf          = log --follow -p -- # log of a file
-	lg          = log --graph --pretty=format:'%Cred%h%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+	info        = show --stat
 	l           = log --oneline
 	la          = log --pretty=format:'%C(yellow)%h%Creset %Cgreen(%ad) %C(bold blue)<%an>%Creset %s' --date=short
 	last        = log -n 1 --stat
-	recent      = log -n 3 --stat
+	lf          = log --follow -p -- # log of a file
+	lg          = log --graph --pretty=format:'%Cred%h%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
 	ll          = log origin..HEAD --pretty=format:'%C(yellow)%h%Creset %Cgreen(%ad) %C(bold blue)<%an>%Creset %s' --date=short
-	info        = show --stat
+	recent      = log -n 3 --stat
 	
 	# FILES
 	dump        = cat-file -p
 	type        = cat-file -t
 	
-	# VISUALS
+	# VISUAL
 	vis         = !gitk &
