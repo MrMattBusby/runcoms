@@ -7,76 +7,85 @@
 	
 [alias]
 	# CONFIG
-	cfg         = config -l
+	fetchone    = "!f() { git remote set-branches --add origin \"$1\" && git fetch origin && git switch \"$1\"; }; f" # readd one branch after doing single-branch
+	fetchall    = !git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*" && git fetch origin # reconfigured config to fetch all remote refs
+	alias       = config --get-regexp ^alias
 	cfgg        = config --global -l
 	cfgl        = config --local -l
-	alias       = config --get-regexp ^alias
-	fetchall    = !git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*" && git fetch origin
-	fetchone    = "!f() { git remote set-branches --add origin \"$1\" && git fetch origin && git switch \"$1\"; }; f"
+	cfg         = config -l
 	
 	# SIMPLE SHORTCUTS
-	st          = status -sb
 	br          = branch
-	ci          = commit -v
-	cm          = commit -m
 	co          = checkout
-	cls         = clear -df
-	df          = diff
+	cls         = clear -df # removed all unversioned files
+	cm          = commit -m
+	ci          = commit -v
+	d           = diff
+	dl          = diff HEAD^ HEAD
+	dless       = !git diff | less
 	dc          = diff --cached
-	pr          = pull --rebase
-	pl          = pull
-	ps          = push origin
+	plm         = pull
+	plr         = pull --rebase
 	rb          = rebase
-	rbc         = rebase --continue
 	rba         = rebase --abort
+	rbc         = rebase --continue
+	rbc         = rebase --skip
 	squash      = rebase -i
+	st          = status -sb
 	sw          = switch
 	swc         = switch -c
 	
 	# REFS/BRANCHES
-	del         = branch -d
-	delete      = branch -D
-	get         = !git fetch origin && git switch 
+	get         = !git fetch origin && git switch # get an existing branch
 	bra         = branch -avv
-	brr         = branch -rv
+	del         = branch --delete
+	delf        = branch --delete --force
 	brl         = branch -lv
+	brr         = branch -rv
+	prune       = fetch --all --prune # delete local branches after they've been remotely deleted
+	refsr       = ls-remote # remote refs (e.g. if you've done a single-branch and need to see everything available)
+	brn         = rev-parse --abbrev-ref HEAD # get branch name
 	brv         = remote show origin # most verbose
 	refsl       = show-ref -d # local refs
-	refsr       = ls-remote # remote refs
 	
-	# INDEX
-	unstage     = reset --mixed HEAD --
-	save        = commit -am 'Save point'
-	done        = push origin HEAD
-	amend       = commit --amend
-	uncommit    = reset --soft HEAD~1 --
-	res         = reset --hard HEAD --
-	readd       = add -u
+	# INDEX/ETC
 	onto        = !git fetch origin && git rebase
+	readd       = add -u
 	shallow     = clone --single-branch --depth 50 -b 
+	amend       = commit --amend
+	save        = commit -am 'Save point'
+	incoming    = !git fetch origin && git diff HEAD FETCH_HEAD
+	incoming2   = "!f() { git fetch origin \"$1\" && git diff HEAD..origin/\"$1\"; }; f"
+	restart     = reset --hard HEAD --
+	unstage     = reset --mixed HEAD --
+	uncommit    = reset --soft HEAD~1 --
 	
 	# PUSHES
+	dela        = "!f() { git branch -d \"$1\" && git push origin --delete \"$1\"; }; f" # delete all
 	new         = "!f() { git switch -c \"$1\" && git push -u origin \"$1\"; }; f"
-	tg          = "!f() { git tag -a \"$1\" -m \"$2\" && git push origin \"$1\"; }; f"
+	tg          = "!f() { git tag -a \"$1\" -m \"$2\" && git push origin \"$1\"; }; f" # delete remote
+	delr        = push origin --delete # {branch}
+	done        = push origin HEAD
 	
 	# STASHES
 	sh          = stash
+	sha         = stash apply
 	shl         = stash list
 	shp         = stash pop
-	sha         = stash apply
 	shs         = stash save
 	
 	# HISTORY
-	l           = log --oneline
-	ll          = log --pretty=format:'%C(yellow)%h%Creset %Cgreen(%ad) %C(bold blue)<%an>%Creset %s' --date=short
-	lg          = log --graph --pretty=format:'%Cred%h%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
 	lf          = log --follow -p -- # log of a file
-	last        = log -3 HEAD
-	hist        = log origin..HEAD --decorate # history of current branch since breaking off from parent
+	lg          = log --graph --pretty=format:'%Cred%h%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+	l           = log --oneline
+	la          = log --pretty=format:'%C(yellow)%h%Creset %Cgreen(%ad) %C(bold blue)<%an>%Creset %s' --date=short
+	last        = log -n 1 --stat
+	recent      = log -n 3 --stat
+	ll          = log origin..HEAD --pretty=format:'%C(yellow)%h%Creset %Cgreen(%ad) %C(bold blue)<%an>%Creset %s' --date=short
 	
 	# FILES
-	type        = cat-file -t
 	dump        = cat-file -p
+	type        = cat-file -t
 	
 	# VISUALS
-	vis         = !gitk
+	vis         = !gitk &
