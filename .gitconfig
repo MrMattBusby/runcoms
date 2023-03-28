@@ -98,11 +98,11 @@
 	
 	# HISTORY
 	l            = log --oneline                                         # [...]
-	la           = log              --pretty=format:'%C(yellow)%h%Creset %Cgreen(%cd) %C(bold blue)<%an> %C(red)%d%Creset %s' --date=short  # [...]
+	la           = log              --pretty=format:'%C(yellow)%h%Creset %Cgreen(%cd) %C(bold blue)<%an>%C(red)%d%Creset %s' --date=short  # [...]
 	last         = log -n 1                                              # .
 	lf           = log --follow -p --                                    # {file} log of a file
-	lg           = log --graph      --pretty=format:'%C(yellow)%h%Creset %s %Cgreen(%cr) %C(bold blue)<%an> %C(red)%d%Creset'  # [...]
-	ll           = log origin..HEAD --pretty=format:'%C(yellow)%h%Creset %Cgreen(%cr) %C(bold blue)<%an> %C(red)%d%Creset %s'  # [...]
+	lg           = log --graph      --pretty=format:'%C(yellow)%h%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%C(red)%d%Creset'  # [...]
+	ll           = log origin..HEAD --pretty=format:'%C(yellow)%h%Creset %Cgreen(%cr) %C(bold blue)<%an>%C(red)%d%Creset %s'  # [...]
 	recent       = log -n 5 --stat                                       # .
 	
 	# FILES
