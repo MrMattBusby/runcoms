@@ -59,10 +59,13 @@
 	del          = branch --delete                                       # {branch}
 	delf         = branch --delete --force                               # {branch}
 	get          = !git fetch && git switch                              # {branch} get an existing branch 
-	head         = "!f() { cat .git/HEAD 2> /dev/null ; git show-ref -d --head HEAD ; git log HEAD -n 1 --oneline; }; f"  # .
+	hash         = show-ref --head --heads --hash --verify HEAD          # .
+	head         = "!f() { cat .git/HEAD 2> /dev/null || cat ../.git/HEAD 2> /dev/null ; git show-ref -d --head --abbrev HEAD ; git log HEAD -n 1 --oneline; }; f"  # .
+	info         = show --stat                                           # [...]
 	prune        = fetch --all --prune                                   # . delete local branches after they've been remotely deleted
 	refs         = show-ref -d --head                                    # . local refs
-	refsr        = ls-remote                                             # . remote refs (e.g. if you've done a single-branch and need to see everything available)
+	refsr        = ls-remote                                             # . remote refs (e.g. if you've done a single-branch and need to see everything available)\
+	tags         = show-ref -d --tags                                    # [...]
 	
 	# INDEX/ETC
 	amend        = commit --amend                                        # {...}
@@ -84,7 +87,7 @@
 	delr         = push origin --delete                                  # {branch}
 	done         = push origin HEAD                                      # .
 	new          = "!f() { git switch -c \"$1\" && git push -u origin \"$1\"; }; f"  # {branch}
-	tg           = "!f() { git tag -a \"$1\" -m \"$2\" && git push origin \"$1\"; }; f"  # {tag} {message}
+	tagged       = "!f() { git tag -a \"$1\" -m \"$2\" && git push origin \"$1\"; }; f"  # {tag} {message}
 	
 	# STASHES
 	sh           = stash                                                 # [...]
@@ -94,14 +97,13 @@
 	shs          = stash save                                            # .
 	
 	# HISTORY
-	info         = show --stat                                           # [...]
 	l            = log --oneline                                         # [...]
-	la           = log --pretty=format:'%C(yellow)%h%Creset %Cgreen(%ad) %C(bold blue)<%an>%Creset %s' --date=short  # [...]
-	last         = log -n 1 --stat                                       # .
+	la           = log              --pretty=format:'%C(yellow)%h%Creset %Cgreen(%cd) %C(bold blue)<%an> %C(red)%d%Creset %s' --date=short  # [...]
+	last         = log -n 1                                              # .
 	lf           = log --follow -p --                                    # {file} log of a file
-	lg           = log --graph --pretty=format:'%Cred%h%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative  # [...]
-	ll           = log origin..HEAD --pretty=format:'%C(yellow)%h%Creset %Cgreen(%ad) %C(bold blue)<%an>%Creset %s' --date=short  # [...]
-	recent       = log -n 3 --stat                                       # .
+	lg           = log --graph      --pretty=format:'%C(yellow)%h%Creset %s %Cgreen(%cr) %C(bold blue)<%an> %C(red)%d%Creset'  # [...]
+	ll           = log origin..HEAD --pretty=format:'%C(yellow)%h%Creset %Cgreen(%cr) %C(bold blue)<%an> %C(red)%d%Creset %s'  # [...]
+	recent       = log -n 5 --stat                                       # .
 	
 	# FILES
 	dump         = cat-file -p                                           # {blob}
