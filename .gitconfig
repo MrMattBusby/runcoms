@@ -59,7 +59,7 @@
 	del          = branch --delete                                       # {branch}
 	delf         = branch --delete --force                               # {branch}
 	get          = !git fetch && git switch                              # {branch} get an existing branch 
-	head         = !cat .git/HEAD; git show-ref -d --head HEAD; git log HEAD -n 1 --oneline  # .
+	head         = "!f() { cat .git/HEAD 2> /dev/null ; git show-ref -d --head HEAD ; git log HEAD -n 1 --oneline; }; f"  # .
 	prune        = fetch --all --prune                                   # . delete local branches after they've been remotely deleted
 	refs         = show-ref -d --head                                    # . local refs
 	refsr        = ls-remote                                             # . remote refs (e.g. if you've done a single-branch and need to see everything available)
