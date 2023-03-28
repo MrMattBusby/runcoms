@@ -63,7 +63,7 @@
 	hash         = show-ref --head --heads --hash --verify HEAD          # .
 	head         = "!f() { cat .git/HEAD 2> /dev/null || cat ../.git/HEAD 2> /dev/null ; git show-ref -d --head --abbrev HEAD ; git log HEAD -n 1 --oneline; }; f"  # .
 	heads        = show-ref -d --head --heads                            # .
-	info         = "!f() { echo ===== config =====; git config user.name; git config user.email; git branch --show-current; git remote -v; git config remote.origin.url; git config remote.origin.fetch; echo ===== refs =====; git show-ref -d --heads --head --abbrev HEAD; git branch -lvv; echo ===== show =====; git show --stat --abbrev-commit; echo ===== stat =====; git status; }; f"  # [...]
+	info         = "!f() { echo ===== config =====; git config user.name; git config user.email; git branch --show-current; git remote -v; git config remote.origin.url; git config remote.origin.fetch; echo ===== refs =====; git show-ref -d --heads --head --abbrev HEAD; git branch -lvv; echo ===== show =====; git log -n 1 --oneline; echo ===== stat =====; git status -sb; }; f"  # [...]
 	prune        = fetch --all --prune                                   # . delete local branches after they've been remotely deleted
 	refs         = show-ref -d --head                                    # . local refs
 	refsr        = ls-remote                                             # . remote refs (e.g. if you've done a single-branch and need to see everything available)\
