@@ -28,7 +28,7 @@
 	dt          = difftool
 	lost        = fsck --lost-found
 	mt          = mergetool
-	peek        = show # e.g. peek branch:file
+	peek        = "!f() { git show \"$1\":\"$2\"; }; f" # branch:file
 	plm         = pull
 	plr         = pull --rebase
 	rb          = rebase
