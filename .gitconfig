@@ -21,9 +21,11 @@
 	cfg          = config -l                                             # .
 	cfgg         = config --global -l                                    # .
 	cfgl         = config --local -l                                     # .
+	ignore-list  = !git ls-files -v | grep -e '^ [a-z]                   # .
 	ignore-local = update-index --assume-unchanged                       # {file}
 	fetch-all    = !git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*" && git fetch origin  # . reconfigured config to fetch all remote refs
 	fetch-one    = "!f() { git remote set-branches --add origin \"$1\" && git fetch origin && git switch \"$1\"; }; f"  # {branch} readd one branch after doing single-branch
+	unignore-local = update-index ---no assume-unchanged                 # {file}
 	
 	# SIMPLE SHORTCUTS
 	br           = branch                                                # [...]
@@ -31,12 +33,16 @@
 	cleanup      = clean -df                                             # . remove all unversioned files
 	cm           = commit -m                                             # {commitMessage}
 	co           = checkout                                              # {...}
+	cp           = cherry-pick                                           # {...}
 	d            = diff                                                  # [...]
 	dc           = diff --cached                                         # [...]
-	dl           = diff HEAD^ HEAD                                       # .
+	dh           = diff HEAD                                             # .
 	diff-less    = !git diff | less                                      # .
+	dl           = diff HEAD^ HEAD                                       # .
 	dt           = difftool                                              # {...}
 	lost         = fsck --lost-found                                     # .
+	ma           = merge --abort                                         # .
+	mc           = merge --continue                                      # .
 	mt           = mergetool                                             # {...}
 	peek         = "!f() { git show \"$1\":\"$2\"; }; f"                 # {branch} {file}
 	plm          = pull                                                  # [...]
@@ -74,6 +80,7 @@
 	incoming     = !git fetch  && git diff HEAD FETCH_HEAD               # .
 	incoming2    = "!f() { git fetch origin \"$1\" && git diff HEAD..origin/\"$1\"; }; f"  # {branch}
 	into         = !git fetch && git merge                               # {branch}
+	merge-dryrun = !git merge --no-commit --no-ff                        # {branch}
 	merge-ours   = checkout --ours --                                    # {files}
 	merge-theirs = checkout --theirs --                                  # {files}
 	onto         = !git fetch && git rebase                              # {branch}
