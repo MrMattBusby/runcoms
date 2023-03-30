@@ -21,7 +21,7 @@
 	cfg          = config -l                                             # .
 	cfgg         = config --global -l                                    # .
 	cfgl         = config --local -l                                     # .
-	ignore-list  = !git ls-files -v | grep -e '^[a-z]'                  # .
+	ignore-list  = !git ls-files -v | grep -e '^[a-z]'                   # .
 	ignore-local = update-index --assume-unchanged                       # {file}
 	fetch-all    = !git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*" && git fetch origin  # . reconfigured config to fetch all remote refs
 	fetch-one    = "!f() { git remote set-branches --add origin \"$1\" && git fetch origin && git switch \"$1\"; }; f"  # {branch} readd one branch after doing single-branch
