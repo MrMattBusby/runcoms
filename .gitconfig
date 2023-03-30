@@ -4,9 +4,9 @@
 [user]
 	name         = Matt Busby
 [core]
-	autocrlf     = true
+	#autocrlf     = true  # Windows
+	#filemode     = false  # Windows
 	longpaths    = true
-	symlinks     = false
 	fscache      = true
 [help]
 	format       = html
