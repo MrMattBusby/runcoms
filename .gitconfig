@@ -71,8 +71,8 @@
 	info         = "!f() { echo ===== config =====; git version; git config user.name; git config user.email; git branch --show-current; git remote -v; git show-ref -d --heads --head --abbrev HEAD; git config --get-all remote.origin.url; git config --get-all remote.origin.fetch; echo ===== branches =====; git branch -lvv; echo ===== show =====; git log -n 1 --oneline; echo ===== stat =====; git status -sb; echo ===== stash =====; git stash list; }; f"  # [...]
 	prune        = fetch --all --prune                                   # . delete local branches after they've been remotely deleted
 	refs         = show-ref -d --head                                    # . local refs
-	refsr        = ls-remote                                             # . remote refs (e.g. if you've done a single-branch and need to see everything available)\
-	retag        = "!f() { if git show-ref -d --tags | sed 's/.*\/\(.*$\)/\1/' | grep -qw \"$1\" ; then tag -fa \"$1\" ; else echo error: tag \'\"$1\"\' not found. ; fi ; }; f"  # {tag}
+	refsr        = ls-remote                                             # . remote refs (e.g. if you've done a single-branch and need to see everything available)
+	retag        = "!f() { if git show-ref -d --tags | sed 's/.*\/\(.*$\)/\1/' | grep -qw \"$1\" ; then git tag -fa \"$1\" ; else echo error: tag \'\"$1\"\' not found. ; fi ; }; f"  # {tag}
 	tags         = show-ref -d --tags                                    # [...]
 	
 	# INDEX/ETC
