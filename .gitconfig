@@ -28,8 +28,10 @@
 	unignore-local = update-index ---no assume-unchanged                 # {file}
 	
 	# SIMPLE SHORTCUTS
-	br           = branch                                                # [...]
+	b            = branch                                                # [...]
+	c            = commit -vm                                            # {commitMessage} {files...}
 	ci           = commit -vm                                            # {commitMessage} {files...}
+	cl           = clone                                                 # {...}
 	cleanup      = clean -df                                             # . remove all unversioned files
 	co           = checkout                                              # {...}
 	cp           = cherry-pick                                           # {...}
@@ -39,29 +41,33 @@
 	diff-less    = !git diff | less                                      # .
 	dl           = diff HEAD^ HEAD                                       # .
 	dt           = difftool                                              # {...}
+	f            = fetch                                                 # {...}
 	lost         = fsck --lost-found                                     # .
+	m            = merge                                                 # {...}
 	ma           = merge --abort                                         # .
 	mc           = merge --continue                                      # .
 	mt           = mergetool                                             # {...}
 	peek         = "!f() { git show \"$1\":\"$2\"; }; f"                 # {branch} {file}
-	plm          = pull                                                  # [...]
+	pl           = pull                                                  # [...] fetch + merge 
 	plr          = pull --rebase                                         # .
+	r            = rebase                                                # {...}
 	rb           = rebase                                                # {...}
-	rba          = rebase --abort                                        # .
-	rbc          = rebase --continue                                     # .
-	rbc          = rebase --skip                                         # .
+	ra           = rebase --abort                                        # .
+	rc           = rebase --continue                                     # .
+	rs           = rebase --skip                                         # .
 	squash       = rebase -i                                             # .
+	s            = status -sb                                            # .
 	st           = status -sb                                            # .
 	sw           = switch                                                # {...}
 	swc          = switch -c                                             # {newBranchName}
 	
 	# REFS/BRANCHES
-	bra          = branch -avv                                           # .
-	brl          = branch -lvv                                           # .
-	branch-name  = branch --show-current                                 # .
-	branch-name2 = rev-parse --abbrev-ref                                # {ref}
-	brr          = branch -rvv                                           # .
-	brv          = !git remote show $(git remote show)                   # . most verbose
+	ba           = branch -avv                                           # .
+	bl           = branch -lvv                                           # .
+	branchname   = branch --show-current                                 # .
+	branchname2  = rev-parse --abbrev-ref                                # {ref}
+	br           = branch -rvv                                           # .
+	bv           = !git remote show $(git remote show)                   # . most verbose
 	del          = branch --delete                                       # {branch}
 	delf         = branch --delete --force                               # {branch}
 	get          = !git fetch && git switch                              # {branch} get an existing branch 
@@ -93,11 +99,13 @@
 	unstage      = restore --source=HEAD --staged --                     # {files} reset --mixed HEAD --
 	
 	# PUSHES
-	dela         = "!f() { git branch -d \"$1\" && git push origin --delete \"$1\"; }; f"  # {branch} delete all
-	delr         = push origin --delete                                  # {branch}
-	done         = push origin HEAD                                      # .
-	new          = "!f() { git switch -c \"$1\" && git push -u origin \"$1\"; }; f"  # {branch}
-	tagout       = "!f() { git tag -a \"$1\" -m \"$2\" && git push origin \"$1\"; }; f"  # {tag} {message}
+	dela          = "!f() { git branch -d \"$1\" && git push origin --delete \"$1\"; }; f"  # {branch} delete all
+	delr          = push origin --delete                                 # {branch}
+	done          = push origin HEAD                                     # .
+	leeroyjenkins = !git commit -am 'Save point' && git push origin HEAD # .
+	ps            = push                                                 # [...]
+	new           = "!f() { git switch -c \"$1\" && git push -u origin \"$1\"; }; f"  # {branch}
+	tagout        = "!f() { git tag -a \"$1\" -m \"$2\" && git push origin \"$1\"; }; f"  # {tag} {message}
 	
 	# STASHES
 	sh           = stash                                                 # [...]
