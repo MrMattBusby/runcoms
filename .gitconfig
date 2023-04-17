@@ -21,6 +21,7 @@
 	cfg          = config -l                                             # .
 	cfgg         = config --global -l                                    # .
 	cfgl         = config --local -l                                     # .
+	edit-cfg     = !vim ~/.gitconfig $(git config include.path)          # .
 	ignore-list  = !git ls-files -v | grep -e '^[a-z]'                   # .
 	ignore-local = update-index --assume-unchanged                       # {file}
 	fetch-all    = !git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*" && git fetch origin  # . reconfigured config to fetch all remote refs
@@ -64,8 +65,7 @@
 	# REFS/BRANCHES
 	ba           = branch -avv                                           # .
 	bl           = branch -lvv                                           # .
-	branchname   = branch --show-current                                 # .
-	branchname2  = rev-parse --abbrev-ref                                # {ref}
+	bn           = switch -c                                             # [...] Branch-new. Doesn't set upstream
 	br           = branch -rvv                                           # .
 	bv           = !git remote show $(git remote show)                   # . most verbose
 	del          = branch --delete                                       # {branch}
@@ -75,11 +75,14 @@
 	head         = "!f() { cat .git/HEAD 2> /dev/null || cat ../.git/HEAD 2> /dev/null ; git show-ref -d --head --abbrev HEAD ; git log HEAD -n 1 --oneline; }; f"  # .
 	heads        = show-ref -d --head --heads                            # .
 	info         = "!f() { echo ===== config =====; git version; git config user.name; git config user.email; git branch --show-current; git remote -v; git show-ref -d --heads --head --abbrev HEAD; git config --get-all remote.origin.url; git config --get-all remote.origin.fetch; echo ===== branches =====; git branch -lvv; echo ===== show =====; git log -n 1 --oneline; echo ===== stat =====; git status -sb; echo ===== stash =====; git stash list; }; f"  # [...]
+	name         = branch --show-current                                 # . Branch name
+	name2        = rev-parse --abbrev-ref                                # {ref}
 	prune        = fetch --all --prune                                   # . delete local branches after they've been remotely deleted
 	refs         = show-ref -d --head                                    # . local refs
 	refsr        = ls-remote                                             # . remote refs (e.g. if you've done a single-branch and need to see everything available)
 	retag        = tag -fa                                               # {tag}
 	#retag        = "!f() { if git show-ref -d --tags | sed 's/.*\/\(.*$\)/\1/' | grep -qw \"$1\" ; then git tag -fa \"$1\" ; else echo error: tag \'\"$1\"\' not found. ; fi ; }; f"  # {tag}
+	set-upstream = !git branch --set-upstream-to="origin/$(git branch --show-current) || git push -u origin $(git branch --show-current) # .
 	tags         = show-ref -d --tags                                    # [...]
 	
 	# INDEX/ETC
