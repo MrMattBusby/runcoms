@@ -82,7 +82,7 @@
 	refsr        = ls-remote                                             # . remote refs (e.g. if you've done a single-branch and need to see everything available)
 	retag        = tag -fa                                               # {tag}
 	#retag        = "!f() { if git show-ref -d --tags | sed 's/.*\/\(.*$\)/\1/' | grep -qw \"$1\" ; then git tag -fa \"$1\" ; else echo error: tag \'\"$1\"\' not found. ; fi ; }; f"  # {tag}
-	set-upstream = !git branch --set-upstream-to="origin/$(git branch --show-current) || git push -u origin $(git branch --show-current) # .
+	set-upstream = !git branch --set-upstream-to="origin/$(git branch --show-current)" || git push -u origin "$(git branch --show-current)" # .
 	tags         = show-ref -d --tags                                    # [...]
 	
 	# INDEX/ETC
