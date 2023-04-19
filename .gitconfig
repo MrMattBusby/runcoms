@@ -79,7 +79,7 @@
 	hash         = show-ref --head --heads --hash --verify HEAD          # .
 	head         = "!f() { cat .git/HEAD 2> /dev/null || cat ../.git/HEAD 2> /dev/null ; git show-ref -d --head --abbrev HEAD ; git log HEAD -n 1 --oneline; }; f"  # .
 	heads        = show-ref -d --head --heads                            # .
-	info         = "!f() { echo ===== config =====; git version; git config user.name; git config user.email; git branch --show-current; git remote -v; git show-ref -d --heads --head --abbrev HEAD; git config --get-all remote.origin.url; git config --get-all remote.origin.fetch; echo ===== branches =====; git branch -lvv; echo ===== show =====; git log -n 1 --oneline; echo ===== stat =====; git status -sb; echo ===== stash =====; git stash list; }; f"  # [...]
+	info         = "!f() { echo === config ===; git version; git config user.name; git config user.email; git branch --show-current; git remote -v; git show-ref -d --heads --head --abbrev HEAD; git config --get-all remote.origin.url; git config --get-all remote.origin.fetch; echo === branches ===; git branch -lvv; echo === show ===; git log -n 1 --oneline --decorate; echo === stat ===; git status -sb; echo === stash ===; git stash list; }; f"  # [...]
 	name         = branch --show-current                                 # . Branch name
 	name2        = rev-parse --abbrev-ref                                # {ref}
 	prune        = fetch --all --prune                                   # . delete local branches after they've been remotely deleted
@@ -134,6 +134,9 @@
 	# FILES
 	dump         = cat-file -p                                           # {blob}
 	type         = cat-file -t                                           # {blob}
+	
+	# OTHER
+	each         = "!f() { for each in $(find . -type d -name .git) ; do pushd \"${each}/..\" &> /dev/null; if [ \"$1\" = \"-f\" ] ; then shift; git fetch &> /dev/null ; fi ; echo \"==================== $(basename $(git config --local remote.origin.url) | sed 's/\\.git$//' ) ====================\"; echo \">>> $(pwd -P)\"; echo \">>> $(git config --local remote.origin.url) (branches: $(git branch -l | wc -l), ahead: $(git branch -lvv | egrep ':\\s*ahead'|wc -l))\"; echo \">>> $(git status -sb | head -1 | sed 's/^#*\\s*//') (changes: $(git status -s -uno | wc -l))\"; echo \">>> $(git log -n 1 --oneline --decorate)\"; if [[ \"$#\" -ne 0 ]] ; then echo \">>> Running \"$*\"...\"; sh -c \"$*\"; fi; popd &> /dev/null; echo; done; }; f" # [...] Run command on each repository under . If '-f' is first argument, fetch will first be run.
 	
 	# VISUAL
 	vis          = !gitk &                                               # .
