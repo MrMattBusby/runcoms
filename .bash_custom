@@ -1,7 +1,7 @@
 # .bash_custom
 # Bourne Again SHell Customizations.
 # Copyright (c) 2009 Matt Busby @MrMattBusby
-# MIT License (https://github.com/MrMattBusby/bin-tools/blob/master/LICENSE)
+# MIT License (https://github.com/MrMattBusby/runcoms/blob/master/LICENSE)
 
 # anaconda priority (preferably you'll activate virtual python env's)
 #if [ -d ~/anaconda/bin ] ; then
