@@ -1,6 +1,11 @@
-# How to use:
+# .gitconfig
+# Copyright (c) 2021 Matt Busby @MrMattBusby
+# MIT License (https://github.com/MrMattBusby/runcoms/blob/master/LICENSE)
+
+# Place in your ~/.gitconfig:
 # [include]
 #	path         = C:/path/to/this/.gitconfig
+
 [user]
 	name         = Matt Busby
 [core]
