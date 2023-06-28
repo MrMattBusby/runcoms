@@ -51,6 +51,7 @@
 	lost         = fsck --lost-found                                     # .
 	m            = merge                                                 # {...}
 	ma           = merge --abort                                         # .
+	mb           = merge-base                                            # {branch-1} {branch-2}
 	mc           = merge --continue                                      # .
 	mt           = mergetool                                             # {...}
 	peek         = "!f() { git show \"$1\":\"$2\"; }; f"                 # {branch} {file}
@@ -92,8 +93,9 @@
 	
 	# INDEX/ETC
 	amend        = commit --amend                                        # {...}
-	incoming     = !git fetch  && git diff HEAD FETCH_HEAD               # .
-	incoming2    = "!f() { git fetch origin \"$1\" && git diff HEAD..origin/\"$1\"; }; f"  # {branch}
+	incoming-diff= !git fetch && git diff HEAD FETCH_HEAD                # .
+	incoming-log = !git fetch && git whatchanged HEAD..FETCH_HEAD        # .
+	#incoming     = "!f() { git fetch origin \"$1\" && git diff HEAD..origin/\"$1\"; }; f"  # {branch}
 	into         = !git fetch && git merge                               # {branch}
 	merge-dryrun = !git merge --no-commit --no-ff                        # {branch}
 	merge-ours   = checkout --ours --                                    # {files}
