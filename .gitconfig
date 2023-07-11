@@ -34,6 +34,7 @@
 	unignore-local = update-index ---no assume-unchanged                 # {file}
 	
 	# SIMPLE SHORTCUTS
+	a            = !git alias                                            # [...]
 	b            = branch                                                # [...]
 	c            = commit -vm                                            # {commitMessage} {files...}
 	ci           = commit -vm                                            # {commitMessage} {files...}
