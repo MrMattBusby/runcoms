@@ -49,6 +49,7 @@
 	dl           = diff HEAD^ HEAD                                       # .
 	dt           = difftool                                              # {...}
 	f            = fetch                                                 # {...}
+	fa           = fetch --all                                           # {...}
 	lost         = fsck --lost-found                                     # .
 	m            = merge                                                 # {...}
 	ma           = merge --abort                                         # .
@@ -58,11 +59,13 @@
 	peek         = "!f() { git show \"$1\":\"$2\"; }; f"                 # {branch} {file}
 	pl           = pull                                                  # [...] fetch + merge 
 	plr          = pull --rebase                                         # .
+	plra         = pull --rebase --autostash                             # .
 	r            = rebase                                                # {...}
+	ra           = rebase --autostash                                    # {...}
 	rb           = rebase                                                # {...}
-	ra           = rebase --abort                                        # .
-	rc           = rebase --continue                                     # .
-	rs           = rebase --skip                                         # .
+	rba          = rebase --abort                                        # .
+	rbc          = rebase --continue                                     # .
+	rbs          = rebase --skip                                         # .
 	squash       = rebase -i                                             # .
 	s            = status -sb                                            # .
 	st           = status -sb                                            # .
@@ -74,6 +77,7 @@
 	bl           = branch -lvv                                           # .
 	bn           = switch -c                                             # [...] Branch-new. Doesn't set upstream
 	br           = branch -rvv                                           # .
+	branchname   = branch --show-current                                 # .
 	bv           = !git remote show $(git remote show)                   # . most verbose
 	del          = branch --delete                                       # {branch}
 	delf         = branch --delete --force                               # {branch}
@@ -82,14 +86,12 @@
 	head         = "!f() { cat .git/HEAD 2> /dev/null || cat ../.git/HEAD 2> /dev/null ; git show-ref -d --head --abbrev HEAD ; git log HEAD -n 1 --oneline; }; f"  # .
 	heads        = show-ref -d --head --heads                            # .
 	info         = "!f() { echo === config ===; git version; git config user.name; git config user.email; git branch --show-current; git remote -v; git show-ref -d --heads --head --abbrev HEAD; git config --get-all remote.origin.url; git config --get-all remote.origin.fetch; echo === branches ===; git branch -lvv; echo === show ===; git log -n 1 --oneline --decorate; echo === stat ===; git status -sb; echo === stash ===; git stash list; }; f"  # [...]
-	name         = branch --show-current                                 # . Branch name
-	name2        = rev-parse --abbrev-ref                                # {ref}
 	prune        = fetch --all --prune                                   # . delete local branches after they've been remotely deleted
+	refname      = rev-parse --abbrev-ref                                # {ref}
 	refs         = show-ref -d --head                                    # . local refs
 	refsr        = ls-remote                                             # . remote refs (e.g. if you've done a single-branch and need to see everything available)
 	retag        = tag -fa                                               # {tag}
 	#retag        = "!f() { if git show-ref -d --tags | sed 's/.*\/\(.*$\)/\1/' | grep -qw \"$1\" ; then git tag -fa \"$1\" ; else echo error: tag \'\"$1\"\' not found. ; fi ; }; f"  # {tag}
-	set-upstream = !git branch --set-upstream-to="origin/$(git branch --show-current)" || git push -u origin "$(git branch --show-current)" # .
 	tags         = show-ref -d --tags                                    # [...]
 	
 	# INDEX/ETC
@@ -107,6 +109,7 @@
 	save         = commit -am 'Save point'                               # .
 	shallow      = clone --single-branch --depth 50 -b                   # {branch}
 	uncommit     = reset --soft HEAD~1 --                                # {files}
+	unshallow    = fetch --unshallow                                     # .
 	unstage      = restore --source=HEAD --staged --                     # {files} reset --mixed HEAD --
 	
 	# PUSHES
@@ -114,8 +117,8 @@
 	delr          = push origin --delete                                 # {branch}
 	done          = push origin HEAD                                     # .
 	leeroyjenkins = !git commit -am 'Save point' && git push origin HEAD # .
-	ps            = push                                                 # [...]
 	new           = "!f() { git switch -c \"$1\" && git push -u origin \"$1\"; }; f"  # {branch}
+	set-upstream  = !git branch --set-upstream-to="origin/$(git branch --show-current)" || git push -u origin "$(git branch --show-current)" # .
 	tagout        = "!f() { git tag -a \"$1\" -m \"$2\" && git push origin \"$1\"; }; f"  # {tag} {message}
 	
 	# STASHES
@@ -123,7 +126,7 @@
 	sha          = stash apply                                           # .
 	shl          = stash list                                            # .
 	shp          = stash pop                                             # .
-	shs          = stash save                                            # .
+	shs          = stash save                                            # {savename}
 	
 	# HISTORY
 	l            = log --oneline                                         # [...]
