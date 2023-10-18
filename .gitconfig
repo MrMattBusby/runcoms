@@ -28,10 +28,10 @@
 	cfgl         = config --local -l                                     # .
 	edit-cfg     = !vim ~/.gitconfig $(git config include.path)          # .
 	ignore-list  = !git ls-files -v | grep -e '^[a-z]'                   # .
-	ignore-local = update-index --assume-unchanged                       # {file}
+	ignore-local = update-index --assume-unchanged --                    # {files}
 	fetch-all    = !git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*" && git fetch origin  # . reconfigured config to fetch all remote refs
 	fetch-one    = "!f() { git remote set-branches --add origin \"$1\" && git fetch origin && git switch \"$1\"; }; f"  # {branch} readd one branch after doing single-branch
-	unignore-local = update-index ---no assume-unchanged                 # {file}
+	unignore-local = update-index --no-assume-unchanged --               # {files}
 	
 	# SIMPLE SHORTCUTS
 	a            = !git alias                                            # [...]
@@ -45,8 +45,7 @@
 	d            = diff                                                  # [...]
 	dc           = diff --cached                                         # [...]
 	dh           = diff HEAD                                             # .
-	diff-less    = !git diff | less                                      # .
-	dl           = diff HEAD^ HEAD                                       # .
+	dl           = diff HEAD^ HEAD                                       # . diff last
 	dt           = difftool                                              # {...}
 	f            = fetch                                                 # {...}
 	fa           = fetch --all                                           # {...}
