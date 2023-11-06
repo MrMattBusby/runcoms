@@ -70,6 +70,7 @@
 	st           = status -sb                                            # .
 	sw           = switch                                                # {...}
 	swc          = switch -c                                             # {newBranchName}
+	swl          = switch -                                              # .
 	
 	# REFS/BRANCHES
 	ba           = branch -avv                                           # .
