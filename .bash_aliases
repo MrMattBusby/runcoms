@@ -1,7 +1,7 @@
 # .bashrc
 # Bourne Again SHell Run Command.
 # Copyright (c) 2009 Matt Busby @MrMattBusby
-# MIT License (https://github.com/MrMattBusby/runcoms/blob/master/LICENSE)
+# MIT-0 License (https://github.com/MrMattBusby/runcoms/blob/master/LICENSE)
 
 ### if not running interactively, don't do anything ###
 [ -z "$PS1" ] && return

@@ -1,7 +1,7 @@
 ".vimrc
 " Vi IMproved Run Command.
 " Copyright (c) 2009 Matt Busby @MrMattBusby
-" MIT License (https://github.com/MrMattBusby/runcoms/blob/master/LICENSE)
+" MIT-0 License (https://github.com/MrMattBusby/runcoms/blob/master/LICENSE)
 "
 "==============================================================================
 " File/Startup/Autocommand actions

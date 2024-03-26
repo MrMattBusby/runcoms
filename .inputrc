@@ -1,7 +1,7 @@
 # .inputrc
 # BASH Input RunCom
 # Copyright (c) 2009 Matt Busby @MrMattBusby
-# MIT License (https://github.com/MrMattBusby/runcoms/blob/master/LICENSE)
+# MIT-0 License (https://github.com/MrMattBusby/runcoms/blob/master/LICENSE)
 
 #bind -m vi-inset "\C-n":menu-complete
 #bind -m vi-inset "\C-p":dynamic-complete-history

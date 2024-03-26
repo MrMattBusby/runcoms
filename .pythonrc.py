@@ -27,7 +27,7 @@ __copyright__ = "Copyright (c) {year} {owner}".format(
                         owner = __author__,
                         year = __date__) + \
                    "All rights reserved."
-__licence__ = """The MIT License
+__licence__ = """The MIT-0 License
 {copyright}
 See: https://github.com/MrMattBusby/runcoms/blob/master/LICENSE
 """.format(copyright=__copyright__)
